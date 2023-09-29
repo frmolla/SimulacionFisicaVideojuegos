@@ -10,6 +10,8 @@
 
 #include <iostream>
 
+#include "Particle.h"
+
 std::string display_text = "This is a test";
 
 
@@ -54,6 +56,10 @@ void initPhysics(bool interactive)
 	sceneDesc.filterShader = contactReportFilterShader;
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
+
+	// My particle
+	Particle* p = new Particle(Vector3(0, 0, 0), Vector3(0, 10, 0));
+
 	}
 
 
@@ -114,6 +120,7 @@ void onCollision(physx::PxActor* actor1, physx::PxActor* actor2)
 int main(int, const char*const*)
 {
 #ifndef OFFLINE_EXECUTION 
+
 	extern void renderLoop();
 	renderLoop();
 #else
