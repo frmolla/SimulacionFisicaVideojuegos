@@ -10,7 +10,7 @@
 
 #include <iostream>
 
-#include "Particle.h"
+#include "ShotManager.h"
 
 std::string display_text = "This is a test";
 
@@ -31,6 +31,10 @@ PxPvd*                  gPvd        = NULL;
 PxDefaultCpuDispatcher*	gDispatcher = NULL;
 PxScene*				gScene      = NULL;
 ContactReportCallback gContactReportCallback;
+
+ShotManager* sM0;
+ShotManager* sM1;
+ShotManager* sM2;
 
 
 // Initialize physics engine
@@ -58,9 +62,10 @@ void initPhysics(bool interactive)
 	gScene = gPhysics->createScene(sceneDesc);
 
 	// My particle
-	Particle* p = new Particle(Vector3(0, 0, 0), Vector3(0, 10, 0));
-
-	}
+	sM0 = new ShotManager(0);
+	sM1 = new ShotManager(1);
+	sM2 = new ShotManager(2);
+}
 
 
 // Function to configure what happens in each step of physics
@@ -72,6 +77,10 @@ void stepPhysics(bool interactive, double t)
 
 	gScene->simulate(t);
 	gScene->fetchResults(true);
+
+	sM0->integrate(t);
+	sM1->integrate(t);
+	sM2->integrate(t);
 }
 
 // Function to clean data
@@ -90,7 +99,7 @@ void cleanupPhysics(bool interactive)
 	transport->release();
 	
 	gFoundation->release();
-	}
+}
 
 // Function called when a key is pressed
 void keyPress(unsigned char key, const PxTransform& camera)
@@ -99,8 +108,18 @@ void keyPress(unsigned char key, const PxTransform& camera)
 
 	switch(toupper(key))
 	{
-	//case 'B': break;
-	//case ' ':	break;
+	case '1': {
+		sM0->shot();
+		break;
+	}
+	case '2': {
+		sM1->shot();
+		break;
+	}
+	case '3': {
+		sM2->shot(); 
+		break;
+	}
 	case ' ':
 	{
 		break;

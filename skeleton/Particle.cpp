@@ -1,11 +1,13 @@
 #include "Particle.h"
 
-Particle::Particle(Vector3 nPos, Vector3 nVel) {
+#include <math.h>
 
-	pos = physx::PxTransform(nPos.x, nPos.y, nPos.z);
-	vel = nVel;
+Particle::Particle(Vector4 color, Vector3 initPos, Vector3 initVel, Vector3 initAc, float nDamping, int state) 
+	: vel(initVel), ac(initAc), damping(nDamping), type(state) {
 
-	renderItem = new RenderItem(CreateShape(physx::PxSphereGeometry(5)), &pos, Vector4(1, 0, 0, 1));
+	pos = physx::PxTransform(initPos.x, initPos.y, initPos.z);
+
+	renderItem = new RenderItem(CreateShape(physx::PxSphereGeometry(5)), &pos, color);
 }
 
 Particle::~Particle() {
@@ -13,7 +15,18 @@ Particle::~Particle() {
 }
 
 void Particle::integrate(double t) {
-	pos.p.x += vel.x;
-	pos.p.y += vel.y;
-	pos.p.z += vel.z;
+	time += t;
+
+	vel.x = (vel.x + ac.x * t) * pow(damping,t);
+	vel.y = (vel.y + ac.y * t) * pow(damping,t);
+	vel.z = (vel.z + ac.z * t) * pow(damping,t);
+
+	pos.p.x += vel.x * t;
+	pos.p.y += vel.y * t;
+	pos.p.z += vel.z * t;
 }
+
+physx::PxTransform Particle::getPosition() {
+	return pos;
+}
+
