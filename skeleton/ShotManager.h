@@ -6,7 +6,7 @@
 class ShotManager
 {
 
-const int LIFE_TIME = 2;
+const int LIFE_TIME = 10;
 
 public:
 	enum shotTypes { PISTOL, ARTILLERY, FIREBALL };

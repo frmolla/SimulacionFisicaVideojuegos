@@ -3,7 +3,11 @@
 #include <math.h>
 
 Particle::Particle(Vector4 color, Vector3 initPos, Vector3 initVel, Vector3 initAc, float nDamping, int state) 
-	: vel(initVel), ac(initAc), damping(nDamping), type(state) {
+	: ac(initAc), damping(nDamping), type(state) {
+
+	vel = Vector3(initVel.x * GetCamera()->getDir().getNormalized().x, 
+		initVel.x * GetCamera()->getDir().getNormalized().y, 
+		initVel.x * GetCamera()->getDir().getNormalized().z);
 
 	pos = physx::PxTransform(initPos.x, initPos.y, initPos.z);
 

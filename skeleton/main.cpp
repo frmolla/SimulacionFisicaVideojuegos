@@ -11,6 +11,7 @@
 #include <iostream>
 
 #include "ShotManager.h"
+#include "Plane.h"
 
 std::string display_text = "This is a test";
 
@@ -35,6 +36,8 @@ ContactReportCallback gContactReportCallback;
 ShotManager* sM0;
 ShotManager* sM1;
 ShotManager* sM2;
+
+Plane* ground;
 
 
 // Initialize physics engine
@@ -65,6 +68,7 @@ void initPhysics(bool interactive)
 	sM0 = new ShotManager(0);
 	sM1 = new ShotManager(1);
 	sM2 = new ShotManager(2);
+	ground = new Plane(Vector4(1,1,0,1), Vector3(0,0,0));
 }
 
 
@@ -99,6 +103,11 @@ void cleanupPhysics(bool interactive)
 	transport->release();
 	
 	gFoundation->release();
+
+	delete(sM0);
+	delete(sM1);
+	delete(sM2);
+	delete(ground);
 }
 
 // Function called when a key is pressed
