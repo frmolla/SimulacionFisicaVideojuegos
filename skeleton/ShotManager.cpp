@@ -41,7 +41,7 @@ void ShotManager::setShot(int currentShotType) {
 	{
 	case PISTOL:
 		invM = 1 / 2.0f;
-		vel = Vector3(35, 0 ,35);
+		vel = Vector3(95, 0 ,95);
 		ac = Vector3(0.0, -1.0f, 00.0);
 		damping = 0.99f;
 		color = Vector4(0, 1, 0, 1);

@@ -38,6 +38,7 @@ ShotManager* sM1;
 ShotManager* sM2;
 
 Plane* ground;
+Plane* target;
 
 
 // Initialize physics engine
@@ -68,7 +69,8 @@ void initPhysics(bool interactive)
 	sM0 = new ShotManager(0);
 	sM1 = new ShotManager(1);
 	sM2 = new ShotManager(2);
-	ground = new Plane(Vector4(1,1,0,1), Vector3(0,0,0));
+	ground = new Plane(Vector4(1,1,0,1), Vector3(0,0,0), Vector3(300,5,300));
+	target = new Plane(Vector4(1,0,0,1), Vector3(-100,50,-100), Vector3(5,5,5));
 }
 
 
@@ -107,7 +109,6 @@ void cleanupPhysics(bool interactive)
 	delete(sM0);
 	delete(sM1);
 	delete(sM2);
-	delete(ground);
 }
 
 // Function called when a key is pressed

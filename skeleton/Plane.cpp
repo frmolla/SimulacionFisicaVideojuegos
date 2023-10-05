@@ -1,10 +1,10 @@
 #include "Plane.h"
 
-Plane::Plane(Vector4 color, Vector3 initPos) {
+Plane::Plane(Vector4 color, Vector3 initPos, Vector3 _tam) : tam(_tam) {
 
 	pos = physx::PxTransform(initPos.x, initPos.y, initPos.z);
 
-	renderItem = new RenderItem(CreateShape(physx::PxBoxGeometry(300,5,300)), &pos, color);
+	renderItem = new RenderItem(CreateShape(physx::PxBoxGeometry(tam)), &pos, color);
 }
 
 Plane::~Plane() {
