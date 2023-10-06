@@ -2,16 +2,12 @@
 
 #include <math.h>
 
-Particle::Particle(Vector4 color, Vector3 initPos, Vector3 initVel, Vector3 initAc, float nDamping, int state) 
-	: ac(initAc), damping(nDamping), type(state) {
-
-	vel = Vector3(initVel.x * GetCamera()->getDir().getNormalized().x, 
-		initVel.x * GetCamera()->getDir().getNormalized().y, 
-		initVel.x * GetCamera()->getDir().getNormalized().z);
+Particle::Particle(Vector4 color, Vector3 initPos, Vector3 initVel, Vector3 initAc, float nDamping, int state, physx::PxGeometry* geo) 
+	: vel(initVel), ac(initAc), damping(nDamping), type(state) {
 
 	pos = physx::PxTransform(initPos.x, initPos.y, initPos.z);
 
-	renderItem = new RenderItem(CreateShape(physx::PxSphereGeometry(5)), &pos, color);
+	renderItem = new RenderItem(CreateShape(*geo), &pos, color);
 }
 
 Particle::~Particle() {

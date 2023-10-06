@@ -13,6 +13,8 @@
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="ShotManager.cpp" />
     <ClCompile Include="Plane.cpp" />
+    <ClCompile Include="ParticleSystem.cpp" />
+    <ClCompile Include="ParticleGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -27,6 +29,8 @@
     <ClInclude Include="Particle.h" />
     <ClInclude Include="ShotManager.h" />
     <ClInclude Include="Plane.h" />
+    <ClInclude Include="ParticleSystem.h" />
+    <ClInclude Include="ParticleGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

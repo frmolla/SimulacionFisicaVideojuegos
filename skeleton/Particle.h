@@ -7,7 +7,7 @@ class Particle
 public:
 	enum shotStates { UNUSED, ACTIVE };
 
-	Particle(Vector4 color, Vector3 initPos, Vector3 initVel, Vector3 initAc, float nDamping, int state);
+	Particle(Vector4 color, Vector3 initPos, Vector3 initVel, Vector3 initAc, float nDamping, int state, physx::PxGeometry* geo);
 	~Particle();
 
 	int type;

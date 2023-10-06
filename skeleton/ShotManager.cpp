@@ -5,7 +5,12 @@ ShotManager::ShotManager(int currentShotType) {
 }
 
 ShotManager::~ShotManager() {
-	// destruir elementos vector
+	auto it = projectiles.begin();
+	while (it != projectiles.end()) {
+		Particle* p = *it;
+		it = projectiles.erase(it);
+		delete(p);
+	}
 }
 
 void ShotManager::integrate(double t) {
@@ -30,6 +35,7 @@ void ShotManager::integrate(double t) {
 			Particle* p = *it;
 			it = projectiles.erase(it);
 			delete(p);
+			count--;
 		}
 		else 
 			++it;
@@ -64,5 +70,10 @@ void ShotManager::setShot(int currentShotType) {
 }
 
 void ShotManager::shot() {
-	projectiles.push_back(new Particle(color, GetCamera()->getTransform().p, vel, ac, damping, Particle::ACTIVE));
+	if (count < MAX_P) {
+		projectiles.push_back(new Particle(color, GetCamera()->getTransform().p,
+			Vector3(vel.x * GetCamera()->getDir().x, vel.y * GetCamera()->getDir().y, vel.z * GetCamera()->getDir().z),
+			ac, damping, Particle::ACTIVE, &physx::PxSphereGeometry(3)));
+		count++;
+	}
 }

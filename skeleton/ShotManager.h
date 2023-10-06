@@ -7,6 +7,7 @@ class ShotManager
 {
 
 const int LIFE_TIME = 10;
+const int MAX_P = 20;
 
 public:
 	enum shotTypes { PISTOL, ARTILLERY, FIREBALL };
@@ -22,6 +23,7 @@ public:
 
 private:
 	int currentShotType;
+	int count = 0;
 
 	Vector4 color;
 	Vector3 vel;

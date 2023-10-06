@@ -12,8 +12,9 @@
 
 #include "ShotManager.h"
 #include "Plane.h"
+#include "ParticleSystem.h"
 
-std::string display_text = "This is a test";
+std::string display_text = "SIM_FIS";
 
 
 using namespace physx;
@@ -39,6 +40,8 @@ ShotManager* sM2;
 
 Plane* ground;
 Plane* target;
+
+ParticleSystem* pS;
 
 
 // Initialize physics engine
@@ -69,8 +72,9 @@ void initPhysics(bool interactive)
 	sM0 = new ShotManager(0);
 	sM1 = new ShotManager(1);
 	sM2 = new ShotManager(2);
-	ground = new Plane(Vector4(1,1,0,1), Vector3(0,0,0), Vector3(300,5,300));
+	ground = new Plane(Vector4(0.5,0.5,0.5,1), Vector3(0,0,0), Vector3(300,5,300));
 	target = new Plane(Vector4(1,0,0,1), Vector3(-100,50,-100), Vector3(5,5,5));
+	pS = new ParticleSystem(0);
 }
 
 
@@ -87,12 +91,20 @@ void stepPhysics(bool interactive, double t)
 	sM0->integrate(t);
 	sM1->integrate(t);
 	sM2->integrate(t);
+	pS->integrate(t);
 }
 
 // Function to clean data
 // Add custom code to the begining of the function
 void cleanupPhysics(bool interactive)
 {
+	delete(sM0);
+	delete(sM1);
+	delete(sM2);
+	delete(ground);
+	delete(target);
+	delete(pS);
+
 	PX_UNUSED(interactive);
 
 	// Rigid Body ++++++++++++++++++++++++++++++++++++++++++
@@ -105,10 +117,6 @@ void cleanupPhysics(bool interactive)
 	transport->release();
 	
 	gFoundation->release();
-
-	delete(sM0);
-	delete(sM1);
-	delete(sM2);
 }
 
 // Function called when a key is pressed
