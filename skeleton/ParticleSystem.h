@@ -2,31 +2,29 @@
 
 #include "Particle.h"
 #include "ParticleGenerator.h"
+#include "UniformParticleGenerator.h"
 #include <vector>
 #include <list>
+#include "Firework.h"
+#include "Fountain.h"
 
 class ParticleSystem
 {
-	const int LIFE_TIME = 10;
-	const int MAX_P = 2500;
-
 public:
-	enum shotTypes { FOUNTAIN, ARTILLERY, FIREBALL };
+	enum generatorTypes { FOUNTAIN, FIREWORK };
 
-	ParticleSystem(int currentShotType);
+	ParticleSystem(int currentGenerator);
 	~ParticleSystem();
 
 	void integrate(double t);
-	ParticleGenerator* getParticleGenerator(std::string name); // por implementar
-	void generateFireworksSystem(); // por implementar
+	ParticleGenerator* getParticleGenerator(const std::string& name); // por implementar
+	void generateFireworksSystem(unsigned firework_type); // por implementar
+	void generateFountainSystem(Particle* p); // por implementar
 
-	void setParticle(int currentShotType);
-	void newParticle();
+	void setGenerator(int currentGenerator);
+	Particle* newParticle();
 
 private:
-	std::vector<Particle*> particles;
-	std::list<ParticleGenerator*> _particle_generators; // sin usar
-
 	int currentShotType;
 
 	int dir = -1;
@@ -35,7 +33,17 @@ private:
 	float invM;
 	Vector4 color;
 	Vector3 vel;
-	Vector3 ac;
+	Vector3 _gravity = Vector3(0, -10, 0);
 	physx::PxTransform pos;
+
+	std::vector<Particle*> particles;
+	std::list<ParticleGenerator*> _particle_generators; // sin usar
+
+	ParticleGenerator* _firework_generator;
+	std::vector<Firework*> _firework_pool;
+
+	void onParticleDeath(Particle* p);
+	void createFireworksSystem();
+
 };
 
