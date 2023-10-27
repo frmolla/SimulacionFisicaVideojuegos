@@ -2,12 +2,12 @@
 
 #include <math.h>
 
-Particle::Particle(Vector4 nColor, Vector3 initPos, Vector3 initVel, Vector3 initAc, float nDamping, int state, physx::PxGeometry* geo) 
-	: vel(initVel), ac(initAc), damping(nDamping), type(state), color(nColor) {
+Particle::Particle(Vector4 nColor, Vector3 initPos, Vector3 initVel, Vector3 initAc, float nDamping, int state, physx::PxGeometry* nGeo) 
+	: vel(initVel), ac(initAc), damping(nDamping), type(state), color(nColor), geo(nGeo) {
 
 	pos = physx::PxTransform(initPos.x, initPos.y, initPos.z);
 
-	renderItem = new RenderItem(CreateShape(*geo), &pos, color);
+	renderItem = new RenderItem(CreateShape(*nGeo), &pos, color);
 }
 
 Particle::~Particle() {

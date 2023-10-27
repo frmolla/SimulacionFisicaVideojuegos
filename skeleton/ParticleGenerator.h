@@ -4,11 +4,12 @@
 #include "core.hpp"
 #include "Particle.h"
 #include <random>
+#include <string>
 
 class ParticleGenerator
 {
 public:
-	ParticleGenerator(); // sin implementar
+	ParticleGenerator(std::string name, int numP); // sin implementar
 	~ParticleGenerator(); // sin implementar
 	void setParticle(Particle* model); // sin implementar
 	virtual std::list<Particle*> generateParticle() = 0;

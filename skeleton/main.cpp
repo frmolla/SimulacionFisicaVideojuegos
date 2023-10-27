@@ -41,8 +41,35 @@ ShotManager* sM2;
 Plane* ground;
 Plane* target;
 
-ParticleSystem* pS;
+ParticleSystem* pF;
+ParticleSystem* pN;
+ParticleSystem* pL;
+ParticleSystem* f1;
 
+
+void init() {
+	sM0 = new ShotManager(0);
+	sM1 = new ShotManager(1);
+	sM2 = new ShotManager(2);
+	ground = new Plane(Vector4(0.5, 0.5, 0.5, 1), Vector3(0, 0, 0), Vector3(300, 5, 300));
+	target = new Plane(Vector4(1, 0, 0, 1), Vector3(-100, 50, -100), Vector3(5, 5, 5));
+	pF = new ParticleSystem(0);
+	pN = new ParticleSystem(1);
+	pL = new ParticleSystem(2);
+	//f1 = new ParticleSystem(1);
+}
+
+void free() {
+	delete(sM0);
+	delete(sM1);
+	delete(sM2);
+	delete(ground);
+	delete(target);
+	delete(pF);
+	delete(pN);
+	delete(pL);
+	//delete(f1);
+}
 
 // Initialize physics engine
 void initPhysics(bool interactive)
@@ -69,12 +96,7 @@ void initPhysics(bool interactive)
 	gScene = gPhysics->createScene(sceneDesc);
 
 	// My particle
-	sM0 = new ShotManager(0);
-	sM1 = new ShotManager(1);
-	sM2 = new ShotManager(2);
-	ground = new Plane(Vector4(0.5,0.5,0.5,1), Vector3(0,0,0), Vector3(300,5,300));
-	target = new Plane(Vector4(1,0,0,1), Vector3(-100,50,-100), Vector3(5,5,5));
-	pS = new ParticleSystem(0);
+	init();
 }
 
 
@@ -91,19 +113,17 @@ void stepPhysics(bool interactive, double t)
 	sM0->integrate(t);
 	sM1->integrate(t);
 	sM2->integrate(t);
-	pS->integrate(t);
+	pF->integrate(t);
+	pN->integrate(t);
+	pL->integrate(t);
+	//f1->integrate(t);
 }
 
 // Function to clean data
 // Add custom code to the begining of the function
 void cleanupPhysics(bool interactive)
 {
-	delete(sM0);
-	delete(sM1);
-	delete(sM2);
-	delete(ground);
-	delete(target);
-	delete(pS);
+	free();
 
 	PX_UNUSED(interactive);
 

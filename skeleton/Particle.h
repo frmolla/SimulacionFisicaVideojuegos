@@ -7,7 +7,7 @@ class Particle
 public:
 	enum shotStates { UNUSED, ACTIVE };
 
-	Particle(Vector4 nColor, Vector3 initPos, Vector3 initVel, Vector3 initAc, float nDamping, int state, physx::PxGeometry* geo);
+	Particle(Vector4 nColor, Vector3 initPos, Vector3 initVel, Vector3 initAc, float nDamping, int state, physx::PxGeometry* nGeo);
 	~Particle();
 
 	int type;
@@ -27,7 +27,7 @@ public:
 	inline float getDamping() { return damping; }
 	inline float getInvM() { return invM; }
 
-private:
+protected:
 	Vector4 color;
 
 	int life_time = 10;
@@ -36,6 +36,7 @@ private:
 	float damping;
 	float invM;
 	physx::PxTransform pos; 
+	physx::PxGeometry* geo;
 	RenderItem* renderItem;
 };
 
