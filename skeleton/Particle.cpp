@@ -22,6 +22,8 @@ Particle* Particle::clone() const {
 void Particle::integrate(double t) {
 	time += t;
 
+	//ac = force * invM;
+
 	vel.x = (vel.x + ac.x * t) * pow(damping,t);
 	vel.y = (vel.y + ac.y * t) * pow(damping,t);
 	vel.z = (vel.z + ac.z * t) * pow(damping,t);
@@ -29,6 +31,8 @@ void Particle::integrate(double t) {
 	pos.p.x += vel.x * t;
 	pos.p.y += vel.y * t;
 	pos.p.z += vel.z * t;
+
+	clearForce();
 }
 
 physx::PxTransform Particle::getPosition() {

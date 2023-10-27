@@ -17,7 +17,7 @@ std::list<Particle*> UniformParticleGenerator::generateParticle() {
 	{
 	case 0:
 		nP.push_back(new Particle(_model->getColor(), Vector3(_p(_mt), 0, _p(_mt)),
-			Vector3(_model->getVelocity().x * _v(_mt), _model->getVelocity().y, _model->getVelocity().z * _v(_mt)),
+			Vector3(_model->getVelocity().x * _v(_mt), _model->getVelocity().y * _k(_mt), _model->getVelocity().z * _v(_mt)),
 			_model->getAc(), _model->getDamping(), Particle::ACTIVE, &physx::PxSphereGeometry(1.5f)));
 		break;
 	case 1:

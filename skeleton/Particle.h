@@ -29,6 +29,10 @@ public:
 	inline float getDamping() { return damping; }
 	inline float getInvM() { return invM; }
 
+	Vector3 force;
+	inline void addForce(Vector3 f) { force += f; }
+	inline void clearForce() { force *= 0.0; }
+
 protected:
 	Vector4 color;
 

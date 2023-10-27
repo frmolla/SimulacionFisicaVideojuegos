@@ -10,6 +10,8 @@
 #include "Firework.h"
 #include "Fountain.h"
 #include <string>
+#include "ParticleForceRegistry.h"
+#include "ForceGenerator.h"
 
 class ParticleSystem
 {
@@ -50,6 +52,9 @@ private:
 	std::list<ParticleGenerator*> _fireworks_generators;
 	ParticleGenerator* _firework_generator;
 	std::vector<Firework*> _firework_pool;
+
+	std::list<ForceGenerator*> _fg;
+	ParticleForceRegistry _pfr;
 
 	void onParticleDeath(Particle* p);
 	void createFireworksSystem();

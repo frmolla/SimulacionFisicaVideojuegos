@@ -48,6 +48,12 @@ ParticleSystem* f1;
 ParticleSystem* f2;
 ParticleSystem* f3;
 
+bool f = false;
+bool fO = false;
+bool r = false;
+bool fw1 = false;
+bool fw2 = false;
+bool fw3 = false;
 
 void init() {
 	sM0 = new ShotManager(0);
@@ -75,6 +81,30 @@ void free() {
 	delete(f1);
 	delete(f2);
 	delete(f3);
+}
+
+void integrate(double t) {
+	sM0->integrate(t);
+	sM1->integrate(t);
+	sM2->integrate(t);
+	if (f) {
+		pF->integrate(t);
+	}
+	else if (fO) {
+		pN->integrate(t);
+	}
+	else if (r) {
+		pL->integrate(t);
+	}
+	else if (fw1) {
+		f1->integrate(t);
+	}
+	else if (fw2) {
+		f2->integrate(t);
+	}
+	else if (fw3) {
+		f3->integrate(t);
+	}
 }
 
 // Initialize physics engine
@@ -116,15 +146,7 @@ void stepPhysics(bool interactive, double t)
 	gScene->simulate(t);
 	gScene->fetchResults(true);
 
-	sM0->integrate(t);
-	sM1->integrate(t);
-	sM2->integrate(t);
-	/*pF->integrate(t);
-	pN->integrate(t);
-	pL->integrate(t);*/
-	//f1->integrate(t);
-	//f2->integrate(t);
-	f3->integrate(t);
+	integrate(t);
 }
 
 // Function to clean data
@@ -164,6 +186,30 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	}
 	case '3': {
 		sM2->shot(); 
+		break;
+	}
+	case 'Z': {
+		f = !f;
+		break;
+	}
+	case 'X': {
+		fO = !fO;
+		break;
+	}
+	case 'C': {
+		r = !r;
+		break;
+	}
+	case 'V': {
+		fw1 = !fw1;
+		break;
+	}
+	case 'B': {
+		fw2 = !fw2;
+		break;
+	}
+	case 'N': {
+		fw3 = !fw3;
 		break;
 	}
 	case ' ':

@@ -20,6 +20,8 @@ ParticleSystem::~ParticleSystem() {
 
 void ParticleSystem::integrate(double t) {
 	
+	_pfr.updateForces(t);
+		
 	iParticles(t);
 
 	iFireworks(t);

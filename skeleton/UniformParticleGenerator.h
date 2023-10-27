@@ -8,6 +8,7 @@ private:
 	Vector3 _vel_width, _pos_width;
 	std::mt19937 _mt;
 	std::uniform_real_distribution<double> _v{ -1,1 };
+	std::uniform_real_distribution<double> _k{ 0.85,1.15 };
 	std::uniform_real_distribution<double> _p{ 0,5 };
 	std::uniform_real_distribution<double> _f{ -100,100 };
 	std::uniform_real_distribution<double> _fv{ -10,10 };
