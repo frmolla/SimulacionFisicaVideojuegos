@@ -9,12 +9,13 @@ public:
 	~Firework();
 	std::list<Particle*> explode();
 	void addGenerator(ParticleGenerator* p);
-	virtual Particle* clone() const;
+	Particle* clone() const;
 protected:
 	unsigned _type;
 	std::list<std::shared_ptr<ParticleGenerator> > _gens;
 private:
 	int _gen;
+	int cir = 36;
 	Particle* pModel;
 	ParticleGenerator* generator;
 };

@@ -45,6 +45,8 @@ ParticleSystem* pF;
 ParticleSystem* pN;
 ParticleSystem* pL;
 ParticleSystem* f1;
+ParticleSystem* f2;
+ParticleSystem* f3;
 
 
 void init() {
@@ -56,7 +58,9 @@ void init() {
 	pF = new ParticleSystem(0);
 	pN = new ParticleSystem(1);
 	pL = new ParticleSystem(2);
-	//f1 = new ParticleSystem(1);
+	f1 = new ParticleSystem(3);
+	f2 = new ParticleSystem(4);
+	f3 = new ParticleSystem(5);
 }
 
 void free() {
@@ -68,7 +72,9 @@ void free() {
 	delete(pF);
 	delete(pN);
 	delete(pL);
-	//delete(f1);
+	delete(f1);
+	delete(f2);
+	delete(f3);
 }
 
 // Initialize physics engine
@@ -113,10 +119,12 @@ void stepPhysics(bool interactive, double t)
 	sM0->integrate(t);
 	sM1->integrate(t);
 	sM2->integrate(t);
-	pF->integrate(t);
+	/*pF->integrate(t);
 	pN->integrate(t);
-	pL->integrate(t);
+	pL->integrate(t);*/
 	//f1->integrate(t);
+	//f2->integrate(t);
+	f3->integrate(t);
 }
 
 // Function to clean data

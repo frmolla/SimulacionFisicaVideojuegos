@@ -10,6 +10,8 @@ public:
 	Particle(Vector4 nColor, Vector3 initPos, Vector3 initVel, Vector3 initAc, float nDamping, int state, physx::PxGeometry* nGeo);
 	~Particle();
 
+	Particle* clone() const;
+
 	int type;
 
 	float time = 0;

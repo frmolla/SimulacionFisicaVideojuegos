@@ -25,7 +25,7 @@ public:
 	}
 	inline void setParticle(Particle* p, bool modify_pos_vel = true) {
 		delete _model;
-		//_model = p->clone();
+		_model = p->clone();
 		if (modify_pos_vel) {
 			_mean_pos = p->getPosition().p;
 			_mean_vel = p->getVelocity();

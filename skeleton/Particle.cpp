@@ -14,6 +14,11 @@ Particle::~Particle() {
 	renderItem->release();
 }
 
+Particle* Particle::clone() const {
+	return new Particle(color, Vector3(pos.p.x,pos.p.y,pos.p.z), vel, ac, damping, type, geo);
+}
+
+
 void Particle::integrate(double t) {
 	time += t;
 
