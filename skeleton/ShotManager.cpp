@@ -73,7 +73,7 @@ void ShotManager::shot() {
 	if (count < MAX_P) {
 		projectiles.push_back(new Particle(color, GetCamera()->getTransform().p,
 			Vector3(vel.x * GetCamera()->getDir().x, vel.y * GetCamera()->getDir().y, vel.z * GetCamera()->getDir().z),
-			ac, damping, Particle::ACTIVE, &physx::PxSphereGeometry(3)));
+			ac, damping, Particle::ACTIVE, &physx::PxSphereGeometry(3), invM));
 		count++;
 	}
 }

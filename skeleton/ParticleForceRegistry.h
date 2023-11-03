@@ -1,12 +1,15 @@
 #pragma once
 #include <map>
+#include <unordered_map>
+#include <unordered_set>
 #include "ForceGenerator.h"
 
-typedef std::pair<ForceGenerator*,Particle*> FRPair;
 
 class ParticleForceRegistry
-	: public std::multimap<ForceGenerator*,Particle*>
 {
+private:
+	std::unordered_map<ForceGenerator*, std::unordered_set<Particle*>> FaP; // fuerza a partícula
+	std::unordered_map<Particle*, std::unordered_set<ForceGenerator*>> PaF;	// partícula a fuerza
 public:
 	void updateForces(double duration);
 

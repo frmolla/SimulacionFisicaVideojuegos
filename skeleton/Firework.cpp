@@ -2,7 +2,7 @@
 #include "GaussianParticleGenerator.h"
 
 Firework::Firework(Vector4 nColor, Vector3 initPos, Vector3 initVel, Vector3 initAc, float nDamping, int state, physx::PxGeometry* geo, int gen) 
-	: Particle(nColor, initPos, initVel, initAc, nDamping, state, geo) {
+	: Particle(nColor, initPos, initVel, initAc, nDamping, state, geo, invM) {
 	_gen = gen;
 }
 

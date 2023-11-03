@@ -3,6 +3,7 @@
 
 ParticleSystem::ParticleSystem(int currentShotType) {
 	setGenerator(currentShotType);
+	_fg.push_back(new GravityForceGenerator(Vector3(0,-10,0)));
 }
 
 ParticleSystem::~ParticleSystem() {
@@ -76,7 +77,7 @@ void ParticleSystem::setGenerator(int currentGenerator) {
 		color = Vector4(0, 0, 1, 1);
 		p = new Particle(color, Vector3(0, 10, 0),
 			Vector3(dir * vel.x * (rand() % 2), vel.y, dir * vel.z * (rand() % 2)),
-			_gravity, damping, Particle::ACTIVE, &physx::PxSphereGeometry(1.5f));
+			Vector3(0,0,0), damping, Particle::ACTIVE, &physx::PxSphereGeometry(1.5f));
 		p->setLifeTime(3);
 		generateSystem(p, currentGenerator, "f");
 		break;
@@ -145,6 +146,7 @@ void ParticleSystem::iParticles(double t) {
 			aux = (*g)->generateParticle();
 			for (auto gp = aux.begin(); gp != aux.end(); ++gp) {
 				particles.push_back(*gp);
+				_pfr.addRegistry(*_fg.begin(), *gp);
 				count++;
 			}
 
@@ -154,6 +156,7 @@ void ParticleSystem::iParticles(double t) {
 		{
 			if ((*shot)->type != Particle::UNUSED)
 			{
+				_pfr.updateForces(t);
 				(*shot)->integrate(t);
 				// Remove particle if invalid
 				if ((*shot)->getPosition().p.y < 0.0f ||

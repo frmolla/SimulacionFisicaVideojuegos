@@ -12,6 +12,7 @@
 #include <string>
 #include "ParticleForceRegistry.h"
 #include "ForceGenerator.h"
+#include "GravityForceGenerator.h"
 
 class ParticleSystem
 {
