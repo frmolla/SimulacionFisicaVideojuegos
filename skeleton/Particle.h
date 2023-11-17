@@ -22,7 +22,7 @@ public:
 	Vector3 getVelocity();
 
 	int getLifeTime();
-	void setLifeTime(int nLifeTime);
+	void setLifeTime(float nLifeTime);
 
 	inline Vector4 getColor() { return color; }
 	inline Vector3 getAc() { return ac; }
@@ -36,7 +36,7 @@ public:
 protected:
 	Vector4 color;
 
-	int life_time;
+	float life_time;
 	Vector3 vel;
 	Vector3 ac;
 	float damping;

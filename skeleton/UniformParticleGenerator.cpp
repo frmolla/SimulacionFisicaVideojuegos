@@ -36,6 +36,13 @@ std::list<Particle*> UniformParticleGenerator::generateParticle() {
 		p->setLifeTime(_model->getLifeTime());
 		nP.push_back(p);
 		break;
+	case 6:
+		p = new Particle(_model->getColor(), Vector3(0, 50, _v(_mt) * 10),
+			Vector3(0, 0, 0),
+			_model->getAc(), _model->getDamping(), Particle::ACTIVE, &physx::PxSphereGeometry(5.0f), _model->getInvM());
+		p->setLifeTime(_model->getLifeTime());
+		nP.push_back(p);
+		break;
 	}
 	
 	return nP;

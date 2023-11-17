@@ -94,7 +94,7 @@ void ParticleSystem::setGenerator(int currentGenerator) {
 			_gravity, damping, Particle::ACTIVE, &physx::PxSphereGeometry(1.5f), invM);
 		p->setLifeTime(5);
 		generateSystem(p, currentGenerator, "fg", 5000);
-		nGravity = Vector3(0, -1, 0);
+		nGravity = Vector3(0, -0.00000001, 0);
 		break;
 	case RAIN:
 		invM = 1/2.0f;
@@ -140,12 +140,23 @@ void ParticleSystem::setGenerator(int currentGenerator) {
 		generateFireworksSystem(fP, 2, "f3");
 		nGravity = Vector3(0, -10, 0);
 		break;
+	case MUELLE1:
+		invM = 1 / 2.0f;
+		vel = Vector3(30, 300, 30);
+		color = Vector4(0, 0, 1, 1);
+		p = new Particle(color, Vector3(0, 0, 0),
+			Vector3(dir * vel.x * (rand() % 2), vel.y, dir * vel.z * (rand() % 2)),
+			Vector3(0, 0, 0), damping, Particle::ACTIVE, &physx::PxSphereGeometry(1.5f), invM);
+		p->setLifeTime(60);
+		generateSystem(p, currentGenerator, "f", 0);
+		nGravity = Vector3(0, -10, 0);
+		break;
 	}
 	gr = new GravityForceGenerator(nGravity);
 	_fg.push_back(gr);
 	aV = new ParticleDragGenerator(nAir,0, airV);
 	_fg.push_back(aV);
-	wV = new WhirlwindForceGenerator(1, 0, Vector3(0,0,0), 0.5, 50);
+	wV = new WhirlwindForceGenerator(1, 0, Vector3(0,0,0), 0.5, 1000);
 	_fg.push_back(wV);
 	eF = new ExplosionForceGenerator(50,500);
 	_fg.push_back(eF);
@@ -164,6 +175,7 @@ void ParticleSystem::iParticles(double t) {
 			aux = (*g)->generateParticle();
 			for (auto gp = aux.begin(); gp != aux.end(); ++gp) {
 				particles.push_back(*gp);
+				
 				if(gravedad)
 					_pfr.addRegistry(gr, *gp);
 				if(torbellino)
@@ -171,6 +183,11 @@ void ParticleSystem::iParticles(double t) {
 				count++;
 			}
 
+		}
+
+		if (elastica1) {
+			muelles1();
+			elastica1 = false;
 		}
 
 		for (auto shot = particles.begin(); shot != particles.end(); ++shot)
@@ -200,6 +217,7 @@ void ParticleSystem::iParticles(double t) {
 		while (it != particles.end()) {
 			if ((*it)->type == Particle::UNUSED) {
 				Particle* p = *it;
+				_pfr.deleteParticleRegistry(p);
 				it = particles.erase(it);
 				delete(p);
 				count--;
@@ -278,8 +296,29 @@ void ParticleSystem::air(Particle* p) {
 			_pfr.addRegistry(aV, p);
 		}
 		else {
-			_pfr.deleteParticleRegistry(p);
+			_pfr.deleteParticleForceRegistry(aV, p);
 		}
 	}	
+}
+
+void ParticleSystem::muelles1() {
+	Particle* p1;
+	Particle* p2;
+	p1 = new Particle(Vector4(1,1,1,1), Vector3(0, 50, 10),
+		Vector3(0, 0, 0),
+		Vector3(0,0,0), 0.99f, Particle::ACTIVE, &physx::PxSphereGeometry(5.0f), 1/2.0f);
+	p1->setLifeTime(60);
+	particles.push_back(p1);
+
+	p2 = new Particle(Vector4(1, 1, 1, 1), Vector3(0, 50, -10),
+		Vector3(0, 0, 0),
+		Vector3(0, 0, 0), 0.99f, Particle::ACTIVE, &physx::PxSphereGeometry(5.0f), 1 / 2.0f);
+	p2->setLifeTime(60);
+	particles.push_back(p2);
+
+	sF = new SpringForceGenerator(-5, (p2->getPosition().p).magnitude(), p2);
+
+	_pfr.addRegistry(sF,p1);
+	_fg.push_back(sF);
 }
 

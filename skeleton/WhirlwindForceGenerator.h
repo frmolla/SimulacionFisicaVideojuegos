@@ -1,8 +1,7 @@
 #pragma once
-//#include "ParticleDragGenerator.h"
-#include "ForceGenerator.h"
+#include "ParticleDragGenerator.h"
 
-class WhirlwindForceGenerator : public ForceGenerator//public ParticleDragGenerator
+class WhirlwindForceGenerator : public ParticleDragGenerator
 {
 private:
 	float _k;

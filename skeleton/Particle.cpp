@@ -53,6 +53,6 @@ int Particle::getLifeTime() {
 	return life_time;
 }
 
-void Particle::setLifeTime(int nLifeTime) {
+void Particle::setLifeTime(float nLifeTime) {
 	life_time = nLifeTime;
 }

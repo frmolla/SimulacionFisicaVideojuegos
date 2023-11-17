@@ -16,11 +16,13 @@
 #include "ParticleDragGenerator.h"
 #include "WhirlwindForceGenerator.h"
 #include "ExplosionForceGenerator.h"
+#include "SpringForceGenerator.h"
+#include "AnchoredSpringForceGenerator.h"
 
 class ParticleSystem
 {
 public:
-	enum generatorTypes { FOUNTAIN, FOG, RAIN, FIREWORK1, FIREWORK2, FIREWORK3 };
+	enum generatorTypes { FOUNTAIN, FOG, RAIN, FIREWORK1, FIREWORK2, FIREWORK3, MUELLE1 };
 
 	ParticleSystem(int currentGenerator);
 	~ParticleSystem();
@@ -66,16 +68,19 @@ private:
 	ParticleDragGenerator* aV;
 	WhirlwindForceGenerator* wV;
 	ExplosionForceGenerator* eF;
+	SpringForceGenerator* sF;
 
 	void onParticleDeath(Particle* p);
 	void createFireworksSystem();
 	void iParticles(double t);
 	void iFireworks(double t);
 	void air(Particle* p);
+	void muelles1();
 
-	bool viento = true;
+	bool viento = false;
 	bool explosion = false;
 	bool torbellino = false;
-	bool gravedad = true;
+	bool gravedad = false;
+	bool elastica1 = true;
 };
 

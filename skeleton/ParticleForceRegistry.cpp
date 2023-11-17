@@ -22,6 +22,13 @@ void ParticleForceRegistry::deleteParticleRegistry(Particle* p) {
 	}
 }
 
+void ParticleForceRegistry::deleteParticleForceRegistry(ForceGenerator* fg, Particle* p) {
+	if (FaP[fg].find(p) != FaP[fg].end()) {
+		FaP[fg].erase(p);
+		PaF[p].erase(fg);
+	}
+}
+
 void ParticleForceRegistry::deleteForceRegistry(ForceGenerator* fg) {
 
 }

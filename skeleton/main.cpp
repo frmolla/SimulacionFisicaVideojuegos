@@ -47,6 +47,7 @@ ParticleSystem* pL;
 ParticleSystem* f1;
 ParticleSystem* f2;
 ParticleSystem* f3;
+ParticleSystem* m1;
 
 bool f = false;
 bool fO = false;
@@ -54,6 +55,7 @@ bool r = false;
 bool fw1 = false;
 bool fw2 = false;
 bool fw3 = false;
+bool m = false;
 
 void init() {
 	sM0 = new ShotManager(0);
@@ -67,6 +69,7 @@ void init() {
 	f1 = new ParticleSystem(3);
 	f2 = new ParticleSystem(4);
 	f3 = new ParticleSystem(5);
+	m1 = new ParticleSystem(6);
 }
 
 void free() {
@@ -81,6 +84,7 @@ void free() {
 	delete(f1);
 	delete(f2);
 	delete(f3);
+	delete(m1);
 }
 
 void integrate(double t) {
@@ -90,20 +94,23 @@ void integrate(double t) {
 	if (f) {
 		pF->integrate(t);
 	}
-	else if (fO) {
+	if (fO) {
 		pN->integrate(t);
 	}
-	else if (r) {
+	if (r) {
 		pL->integrate(t);
 	}
-	else if (fw1) {
+	if (fw1) {
 		f1->integrate(t);
 	}
-	else if (fw2) {
+	if (fw2) {
 		f2->integrate(t);
 	}
-	else if (fw3) {
+	if (fw3) {
 		f3->integrate(t);
+	}
+	if (m) {
+		m1->integrate(t);
 	}
 }
 
@@ -210,6 +217,10 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	}
 	case 'N': {
 		fw3 = !fw3;
+		break;
+	}
+	case 'M': {
+		m = !m;
 		break;
 	}
 	case ' ':
