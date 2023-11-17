@@ -5,7 +5,7 @@
 class Firework : public Particle
 {
 public:
-	Firework(Vector4 nColor, Vector3 initPos, Vector3 initVel, Vector3 initAc, float nDamping, int state, physx::PxGeometry* geo, int gen);
+	Firework(Vector4 nColor, Vector3 initPos, Vector3 initVel, Vector3 initAc, float nDamping, int state, physx::PxGeometry* geo, int gen, float nInvM);
 	~Firework();
 	std::list<Particle*> explode();
 	void addGenerator(ParticleGenerator* p);

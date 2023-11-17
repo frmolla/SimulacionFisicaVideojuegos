@@ -3,7 +3,7 @@
 void ParticleForceRegistry::updateForces(double duration) {
 	for (auto it = FaP.begin(); it != FaP.end(); ++it) {
 		for (auto it2 = FaP[it->first].begin(); it2 != FaP[it->first].end(); ++it2) {
-			it->first->updateForce((*it2));
+			it->first->updateForce((*it2), duration);
 		}
 	}
 }
@@ -22,6 +22,6 @@ void ParticleForceRegistry::deleteParticleRegistry(Particle* p) {
 	}
 }
 
-void ParticleForceRegistry::deleteForceRegistry() {
+void ParticleForceRegistry::deleteForceRegistry(ForceGenerator* fg) {
 
 }

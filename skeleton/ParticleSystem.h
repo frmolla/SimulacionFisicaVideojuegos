@@ -13,6 +13,9 @@
 #include "ParticleForceRegistry.h"
 #include "ForceGenerator.h"
 #include "GravityForceGenerator.h"
+#include "ParticleDragGenerator.h"
+#include "WhirlwindForceGenerator.h"
+#include "ExplosionForceGenerator.h"
 
 class ParticleSystem
 {
@@ -25,13 +28,15 @@ public:
 	void integrate(double t);
 	ParticleGenerator* getParticleGenerator(const std::string& name); 
 	void generateFireworksSystem(Firework* p, unsigned firework_type, std::string name);
-	void generateSystem(Particle* p, int t, std::string name, int num = 2500);
+	void generateSystem(Particle* p, int t, std::string name, int num = 1);
 
 	void setGenerator(int currentGenerator);
 	Particle* newParticle();
 
 private:
 	int currentShotType;
+
+	float timer = 0;
 
 	int typeF = 0;
 	int dir = -1;
@@ -57,9 +62,20 @@ private:
 	std::list<ForceGenerator*> _fg;
 	ParticleForceRegistry _pfr;
 
+	GravityForceGenerator* gr;
+	ParticleDragGenerator* aV;
+	WhirlwindForceGenerator* wV;
+	ExplosionForceGenerator* eF;
+
 	void onParticleDeath(Particle* p);
 	void createFireworksSystem();
 	void iParticles(double t);
 	void iFireworks(double t);
+	void air(Particle* p);
+
+	bool viento = true;
+	bool explosion = false;
+	bool torbellino = false;
+	bool gravedad = true;
 };
 

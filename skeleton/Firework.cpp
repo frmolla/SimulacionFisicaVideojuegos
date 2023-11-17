@@ -1,8 +1,8 @@
 #include "Firework.h"
 #include "GaussianParticleGenerator.h"
 
-Firework::Firework(Vector4 nColor, Vector3 initPos, Vector3 initVel, Vector3 initAc, float nDamping, int state, physx::PxGeometry* geo, int gen) 
-	: Particle(nColor, initPos, initVel, initAc, nDamping, state, geo, invM) {
+Firework::Firework(Vector4 nColor, Vector3 initPos, Vector3 initVel, Vector3 initAc, float nDamping, int state, physx::PxGeometry* geo, int gen, float nInvM) 
+	: Particle(nColor, initPos, initVel, initAc, nDamping, state, geo, nInvM) {
 	_gen = gen;
 }
 
@@ -38,6 +38,6 @@ void Firework::addGenerator(ParticleGenerator* p) {
 }
 
 Particle* Firework::clone() const {
-	return new Firework(color, Vector3(pos.p.x,pos.p.y,pos.p.z), vel, ac, damping, type, &physx::PxSphereGeometry(1.5f), _gen);
+	return new Firework(color, Vector3(pos.p.x,pos.p.y,pos.p.z), vel, ac, damping, type, &physx::PxSphereGeometry(1.5f), _gen, invM);
 }
 

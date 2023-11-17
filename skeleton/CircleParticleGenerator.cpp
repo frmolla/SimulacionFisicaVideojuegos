@@ -23,7 +23,7 @@ std::list<Particle*> CircleParticleGenerator::generateParticle() {
             c = Vector4(1, 1, 1, 1);
         Firework* par = new Firework(c, Vector3(nPos.x, nPos.y, nPos.z),
             Vector3(cos(r) * 20, a(_mt), sin(r) * 20),
-            _model->getAc(), _model->getDamping(), Particle::ACTIVE, &physx::PxSphereGeometry(1.5f), gen);
+            _model->getAc(), _model->getDamping(), Particle::ACTIVE, &physx::PxSphereGeometry(1.5f), gen, _model->getInvM());
         par->setLifeTime(3);
         par->addGenerator(this);
         setParticle(par, true);

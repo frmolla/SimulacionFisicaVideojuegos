@@ -12,7 +12,7 @@ protected:
 	double std_dev_t;
 	std::normal_distribution<double> p{0,2};
 	std::normal_distribution<double> v{1,0.25};
-	std::normal_distribution<double> a{70,15};
+	std::normal_distribution<double> a{100,25};
 	std::normal_distribution<double> vr{0,15};
 	Vector3 nPos = Vector3(0,0,0);
 public:

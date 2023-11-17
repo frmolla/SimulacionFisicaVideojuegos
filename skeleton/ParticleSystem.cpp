@@ -3,7 +3,6 @@
 
 ParticleSystem::ParticleSystem(int currentShotType) {
 	setGenerator(currentShotType);
-	_fg.push_back(new GravityForceGenerator(Vector3(0,-10,0)));
 }
 
 ParticleSystem::~ParticleSystem() {
@@ -67,86 +66,108 @@ void ParticleSystem::generateSystem(Particle* p, int t, std::string name, int nu
 
 void ParticleSystem::setGenerator(int currentGenerator) {
 	damping = 0.99f;
+	Vector3 nGravity;
+	Vector3 airV = Vector3(1, 0, 0);
+	float nAir = 100;
 	switch (currentGenerator)
 	{
+	timer = 0;
 	Particle* p;
 	Firework* fP;
 	case FOUNTAIN:
-		invM = 1 / 2.0f;
-		vel = Vector3(5, 30, 5);
+		invM = 1/2.0f;
+		vel = Vector3(30, 300, 30);
 		color = Vector4(0, 0, 1, 1);
-		p = new Particle(color, Vector3(0, 10, 0),
+		p = new Particle(color, Vector3(0, 0, 0),
 			Vector3(dir * vel.x * (rand() % 2), vel.y, dir * vel.z * (rand() % 2)),
-			Vector3(0,0,0), damping, Particle::ACTIVE, &physx::PxSphereGeometry(1.5f));
-		p->setLifeTime(3);
-		generateSystem(p, currentGenerator, "f");
+			Vector3(0,0,0), damping, Particle::ACTIVE, &physx::PxSphereGeometry(1.5f), invM);
+		p->setLifeTime(10);
+		generateSystem(p, currentGenerator, "f", 2500);
+		nGravity = Vector3(0, -10, 0);
 		break;
 	case FOG:
-		invM = 1 / 2.0f;
-		vel = Vector3(1, 1, 1);
+		invM = 1/2.0f;
+		vel = Vector3(0.1, 0.1, 0.1);
 		color = Vector4(1, 1, 1, 1);
-		p = new Particle(color, Vector3(0, 10, 0),
+		p = new Particle(color, Vector3(0, 0, 0),
 			Vector3(dir * vel.x * (rand() % 2), vel.y, dir * vel.z * (rand() % 2)),
-			_gravity, damping, Particle::ACTIVE, &physx::PxSphereGeometry(1.5f));
-		p->setLifeTime(3);
+			_gravity, damping, Particle::ACTIVE, &physx::PxSphereGeometry(1.5f), invM);
+		p->setLifeTime(5);
 		generateSystem(p, currentGenerator, "fg", 5000);
+		nGravity = Vector3(0, -1, 0);
 		break;
 	case RAIN:
-		invM = 1 / 2.0f;
-		vel = Vector3(1, 0, 1);
+		invM = 1/2.0f;
+		vel = Vector3(0, 0, 0);
 		color = Vector4(0, 0, 1, 1);
-		p = new Particle(color, Vector3(0, 10, 0),
+		p = new Particle(color, Vector3(0, 0, 0),
 			Vector3(dir * vel.x * (rand() % 2), vel.y, dir * vel.z * (rand() % 2)),
-			_gravity, damping, Particle::ACTIVE, &physx::PxSphereGeometry(1.5f));
+			_gravity, damping, Particle::ACTIVE, &physx::PxSphereGeometry(1.5f), invM);
 		p->setLifeTime(3);
-		generateSystem(p, currentGenerator, "r");
+		generateSystem(p, currentGenerator, "r", 5000);
+		nGravity = Vector3(0, -5, 0);
 		break;
 	case FIREWORK1:
-		invM = 1 / 2.0f;
-		vel = Vector3(5, 30, 5);
+		invM = 1/2.0f;
+		vel = Vector3(20, 400, 20);
 		color = Vector4(1, 1, 1, 1);
 		fP = new Firework(color, Vector3(0, 0, 0),
-			vel, _gravity, damping, Particle::ACTIVE, &physx::PxSphereGeometry(1.5f), 2);
+			vel, _gravity, damping, Particle::ACTIVE, &physx::PxSphereGeometry(1.5f), 2, invM);
 		_firework_pool.push_back(fP);
 		fP->setLifeTime(3);
 		generateFireworksSystem(fP, 0, "f1");
+		nGravity = Vector3(0, -10, 0);
 		break;
 	case FIREWORK2:
-		invM = 1 / 2.0f;
-		vel = Vector3(5, 30, 5);
+		invM = 1/2.0f;
+		vel = Vector3(10, 400, 10);
 		color = Vector4(1, 0, 0, 1);
 		fP = new Firework(color, Vector3(0, 0, 0),
-			vel, _gravity, damping, Particle::ACTIVE, &physx::PxSphereGeometry(1.5f), 1);
+			vel, _gravity, damping, Particle::ACTIVE, &physx::PxSphereGeometry(1.5f), 1, invM);
 		_firework_pool.push_back(fP);
 		fP->setLifeTime(3);
 		generateFireworksSystem(fP, 1, "f2");
+		nGravity = Vector3(0, -10, 0);
 		break;
 	case FIREWORK3:
-		invM = 1 / 2.0f;
-		vel = Vector3(5, 30, 5);
+		invM = 1/2.0f;
+		vel = Vector3(20, 500, 20);
 		color = Vector4(1, 0, 1, 1);
 		fP = new Firework(color, Vector3(0, 0, 0),
-			vel, _gravity, damping, Particle::ACTIVE, &physx::PxSphereGeometry(1.5f), 3);
+			vel, _gravity, damping, Particle::ACTIVE, &physx::PxSphereGeometry(1.5f), 3, invM);
 		_firework_pool.push_back(fP);
 		fP->setLifeTime(3);
 		generateFireworksSystem(fP, 2, "f3");
+		nGravity = Vector3(0, -10, 0);
 		break;
 	}
+	gr = new GravityForceGenerator(nGravity);
+	_fg.push_back(gr);
+	aV = new ParticleDragGenerator(nAir,0, airV);
+	_fg.push_back(aV);
+	wV = new WhirlwindForceGenerator(1, 0, Vector3(0,0,0), 0.5, 50);
+	_fg.push_back(wV);
+	eF = new ExplosionForceGenerator(50,500);
+	_fg.push_back(eF);
 }
 
 Particle* ParticleSystem::newParticle() {
 	return new Particle(color, Vector3(0,0,0),Vector3(0,0,0),
-		_gravity, damping, Particle::ACTIVE, &physx::PxSphereGeometry(1.5f));
+		_gravity, damping, Particle::ACTIVE, &physx::PxSphereGeometry(1.5f), 1/2.0f);
 }
 
 void ParticleSystem::iParticles(double t) {
+	timer += t;
 	for (auto g = _particle_generators.begin(); g != _particle_generators.end(); ++g) {
 		if (count < (*g)->getNumParticles()) {
 			std::list<Particle*> aux;
 			aux = (*g)->generateParticle();
 			for (auto gp = aux.begin(); gp != aux.end(); ++gp) {
 				particles.push_back(*gp);
-				_pfr.addRegistry(*_fg.begin(), *gp);
+				if(gravedad)
+					_pfr.addRegistry(gr, *gp);
+				if(torbellino)
+					_pfr.addRegistry(wV, *gp);
 				count++;
 			}
 
@@ -156,12 +177,18 @@ void ParticleSystem::iParticles(double t) {
 		{
 			if ((*shot)->type != Particle::UNUSED)
 			{
+				if (timer > 3 && explosion) {
+					_pfr.addRegistry(eF, *shot);
+					if(timer > 4)
+						timer = 0;
+				}
+				air(*shot);
 				_pfr.updateForces(t);
 				(*shot)->integrate(t);
 				// Remove particle if invalid
 				if ((*shot)->getPosition().p.y < 0.0f ||
 					(*shot)->time >(*shot)->getLifeTime() ||
-					(*shot)->getPosition().p.y > 200.0f)
+					(*shot)->getPosition().p.y > 500.0f)
 				{
 					// Free the slot
 					(*shot)->type = Particle::UNUSED;
@@ -193,6 +220,10 @@ void ParticleSystem::iFireworks(double t) {
 			aux = (*g)->generateParticle();
 			for (auto gp = aux.begin(); gp != aux.end(); ++gp) {
 				fireworks.push_back(*gp);
+				if (gravedad)
+					_pfr.addRegistry(gr, *gp);
+				if (torbellino)
+					_pfr.addRegistry(wV, *gp);
 				count++;
 			}
 
@@ -202,6 +233,8 @@ void ParticleSystem::iFireworks(double t) {
 		{
 			if ((*shot)->type != Particle::UNUSED)
 			{
+				air(*shot);
+				_pfr.updateForces(t);
 				(*shot)->integrate(t);
 				// Remove particle if invalid
 				if ((*shot)->getPosition().p.y < 0.0f ||
@@ -237,3 +270,16 @@ void ParticleSystem::iFireworks(double t) {
 		}
 	}
 }
+
+void ParticleSystem::air(Particle* p) {
+	if (viento) {
+		if (p->getPosition().p.x < 80 && p->getPosition().p.x > -80
+			&& p->getPosition().p.z < 80 && p->getPosition().p.z > -80) {
+			_pfr.addRegistry(aV, p);
+		}
+		else {
+			_pfr.deleteParticleRegistry(p);
+		}
+	}	
+}
+

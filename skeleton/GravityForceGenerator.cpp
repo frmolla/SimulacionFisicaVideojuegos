@@ -4,10 +4,11 @@ GravityForceGenerator::GravityForceGenerator(const Vector3& g) {
 	_gravity = g;
 }
 
-void GravityForceGenerator::updateForce(Particle* particle) {
+void GravityForceGenerator::updateForce(Particle* particle, double t) {
 	if (fabs(particle->getInvM() < 1e-10))
 		return;
 
 	// aqui deberia ser la masa
-	particle->addForce(_gravity * 1/particle->getInvM());
+	float masa = 1 / particle->getInvM();
+	particle->addForce(_gravity * masa);
 }

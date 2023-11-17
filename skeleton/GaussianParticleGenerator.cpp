@@ -16,7 +16,7 @@ std::list<Particle*> GaussianParticleGenerator::generateParticle() {
     if (pType) {
         Firework* par = new Firework(Vector4(_u(_mt), _u(_mt), 0, 1), Vector3(nPos.x, nPos.y, nPos.z),
             Vector3(vr(_mt), a(_mt), vr(_mt)),
-            _model->getAc(), _model->getDamping(), Particle::ACTIVE, &physx::PxSphereGeometry(1.5f), gen);
+            _model->getAc(), _model->getDamping(), Particle::ACTIVE, &physx::PxSphereGeometry(1.5f), gen, _model->getInvM());
         par->setLifeTime(3);
         par->addGenerator(this);
         setParticle(par, true);

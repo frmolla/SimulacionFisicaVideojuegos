@@ -7,7 +7,7 @@ class Particle
 public:
 	enum shotStates { UNUSED, ACTIVE };
 
-	Particle(Vector4 nColor, Vector3 initPos, Vector3 initVel, Vector3 initAc, float nDamping, int state, physx::PxGeometry* nGeo, int nInvM);
+	Particle(Vector4 nColor, Vector3 initPos, Vector3 initVel, Vector3 initAc, float nDamping, int state, physx::PxGeometry* nGeo, float nInvM);
 	~Particle();
 
 	Particle* clone() const;
@@ -29,14 +29,14 @@ public:
 	inline float getDamping() { return damping; }
 	inline float getInvM() { return invM; }
 
-	Vector3 force;
+	Vector3 force = Vector3(0,0,0);
 	inline void addForce(Vector3 f) { force += f; }
 	inline void clearForce() { force *= 0.0; }
 
 protected:
 	Vector4 color;
 
-	int life_time = 10;
+	int life_time;
 	Vector3 vel;
 	Vector3 ac;
 	float damping;

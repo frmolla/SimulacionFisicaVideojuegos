@@ -36,7 +36,7 @@ public:
 	inline int getNumParticles() { return _num_particles; }
 	inline std::string getName() { return _name; }
 protected:
-	int _num_particles = 2500;
+	int _num_particles = 1;
 	double _generation_probability = 1;
 	Particle* _model = nullptr;
 	Vector3 _mean_pos, _mean_vel;
