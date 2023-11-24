@@ -2,11 +2,12 @@
 #include <iostream>
 #include <cmath>
 
-ExplosionForceGenerator::ExplosionForceGenerator(const float k, float r, Vector3 o)
+ExplosionForceGenerator::ExplosionForceGenerator(const float k, float r, Vector3 o) // añadir tE constructora
 	: ForceGenerator() {
 	_k = k;
 	_r = r;
 	ori = o;
+	tE = 500;
 }
 
 void ExplosionForceGenerator::updateForce(Particle* particle, double t) {

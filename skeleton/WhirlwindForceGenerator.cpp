@@ -12,7 +12,7 @@ void WhirlwindForceGenerator::updateForce(Particle* particle, double t) {
 
 	if ((particle->getPosition().p - ori).magnitude() < _r) {
 		_airVelocity.x = -(particle->getPosition().p.z - ori.z);
-		_airVelocity.y = (50 - (particle->getPosition().p.y - ori.y));
+		_airVelocity.y = (80 - (particle->getPosition().p.y - ori.y));
 		_airVelocity.z = ((particle->getPosition().p.x - ori.x));
 	}
 

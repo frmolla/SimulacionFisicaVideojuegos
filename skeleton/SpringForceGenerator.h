@@ -10,5 +10,7 @@ protected:
 public:
 	SpringForceGenerator(float k, float x0, Particle* p);
 	virtual void updateForce(Particle* particle, double t);
+	inline void setK(double k) { _k = k; }
+	virtual ~SpringForceGenerator() {}
 };
 

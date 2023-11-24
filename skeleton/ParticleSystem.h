@@ -78,7 +78,7 @@ private:
 	void muelles1();
 
 	bool viento = false;
-	bool explosion = false;
+	bool explosion = true;
 	bool torbellino = false;
 	bool gravedad = false;
 	bool elastica1 = true;

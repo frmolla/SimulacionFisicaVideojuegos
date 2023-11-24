@@ -8,11 +8,15 @@ SpringForceGenerator::SpringForceGenerator(float k, float x0, Particle* p) {
 }
 
 void SpringForceGenerator::updateForce(Particle* particle, double t) {
-	// Check that the partivle has Finite Mass
-	if (fabs(particle->getInvM() < 1e-10))
-		return;
 
-	Vector3 force = -_k * (other->getPosition().p - particle->getPosition().p);
+	Vector3 relative_pos_vector = other->getPosition().p - particle->getPosition().p;
+	Vector3 force;
+	
+	const float lenght = relative_pos_vector.normalize();
+	const float delta_x = lenght - _x0;
+
+	force = relative_pos_vector * delta_x * _k;
+
 	particle->addForce(force);
 }
 

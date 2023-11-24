@@ -68,7 +68,7 @@ void ParticleSystem::setGenerator(int currentGenerator) {
 	damping = 0.99f;
 	Vector3 nGravity;
 	Vector3 airV = Vector3(1, 0, 0);
-	float nAir = 100;
+	float nAir = 10;
 	switch (currentGenerator)
 	{
 	timer = 0;
@@ -76,7 +76,7 @@ void ParticleSystem::setGenerator(int currentGenerator) {
 	Firework* fP;
 	case FOUNTAIN:
 		invM = 1/2.0f;
-		vel = Vector3(30, 300, 30);
+		vel = Vector3(30, 400, 30);
 		color = Vector4(0, 0, 1, 1);
 		p = new Particle(color, Vector3(0, 0, 0),
 			Vector3(dir * vel.x * (rand() % 2), vel.y, dir * vel.z * (rand() % 2)),
@@ -94,6 +94,7 @@ void ParticleSystem::setGenerator(int currentGenerator) {
 			_gravity, damping, Particle::ACTIVE, &physx::PxSphereGeometry(1.5f), invM);
 		p->setLifeTime(5);
 		generateSystem(p, currentGenerator, "fg", 5000);
+		//nGravity = Vector3(0, -1, 0);
 		nGravity = Vector3(0, -0.00000001, 0);
 		break;
 	case RAIN:
@@ -156,9 +157,9 @@ void ParticleSystem::setGenerator(int currentGenerator) {
 	_fg.push_back(gr);
 	aV = new ParticleDragGenerator(nAir,0, airV);
 	_fg.push_back(aV);
-	wV = new WhirlwindForceGenerator(1, 0, Vector3(0,0,0), 0.5, 1000);
+	wV = new WhirlwindForceGenerator(1, 0, Vector3(0,0,0), 0.5, 500);
 	_fg.push_back(wV);
-	eF = new ExplosionForceGenerator(50,500);
+	eF = new ExplosionForceGenerator(5,500);
 	_fg.push_back(eF);
 }
 
@@ -302,7 +303,7 @@ void ParticleSystem::air(Particle* p) {
 }
 
 void ParticleSystem::muelles1() {
-	Particle* p1;
+	/*Particle* p1;
 	Particle* p2;
 	p1 = new Particle(Vector4(1,1,1,1), Vector3(0, 50, 10),
 		Vector3(0, 0, 0),
@@ -319,6 +320,26 @@ void ParticleSystem::muelles1() {
 	sF = new SpringForceGenerator(-5, (p2->getPosition().p).magnitude(), p2);
 
 	_pfr.addRegistry(sF,p1);
+	_fg.push_back(sF);*/
+
+	Particle* p1 = new Particle(Vector4(1,1,1,1), Vector3(-10,10,0), 
+		Vector3(0,0,0), Vector3(0,0,0), 0.99, 
+		Particle::ACTIVE, &physx::PxSphereGeometry(5.0f), 0);
+	p1->setLifeTime(60);
+	particles.push_back(p1);
+
+	Particle* p2 = new Particle(Vector4(1,1,1,1), Vector3(10,10,0), 
+		Vector3(0,0,0), Vector3(0,0,0), 0.99, 
+		Particle::ACTIVE, &physx::PxSphereGeometry(5.0f), 1 / 2.0f);
+	p2->setLifeTime(60);
+	particles.push_back(p2);
+
+	sF = new SpringForceGenerator(-5, 10, p2);
+	_pfr.addRegistry(sF, p1);
 	_fg.push_back(sF);
+
+	sF = new SpringForceGenerator(5, 10, p1);
+	_pfr.addRegistry(sF, p2);
+	_fg.push_back(sF); 
 }
 

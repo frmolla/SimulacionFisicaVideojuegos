@@ -2,7 +2,9 @@
 #include <iostream>
 
 AnchoredSpringForceGenerator::AnchoredSpringForceGenerator(float k, float x0, Particle* p) 
-	: SpringForceGenerator(k,x0,p) { }
+	: SpringForceGenerator(k,x0,p) { 
+	//other = new Particle(anchor_pos, {0,0,0}, {0,0,0}, 0, 1e6, 0,0, BOX);
+}
 
 void AnchoredSpringForceGenerator::updateForce(Particle* particle, double t) {
 	// Check that the partivle has Finite Mass

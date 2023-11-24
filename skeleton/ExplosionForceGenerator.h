@@ -8,7 +8,7 @@ private:
 	float _r;
 	Vector3 ori;
 	float _t = 0;
-	float tE = 500;
+	float tE;
 public:
 	ExplosionForceGenerator();
 	ExplosionForceGenerator(const float k, float r, Vector3 o = Vector3(0, 0, 0));
