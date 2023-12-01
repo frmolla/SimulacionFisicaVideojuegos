@@ -3,6 +3,8 @@
 
 class ForceGenerator
 {
+protected:
+	int k;
 public:
 	ForceGenerator() {};
 	virtual ~ForceGenerator() {}

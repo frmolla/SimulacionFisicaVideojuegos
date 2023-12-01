@@ -67,7 +67,7 @@ void ParticleSystem::generateSystem(Particle* p, int t, std::string name, int nu
 void ParticleSystem::setGenerator(int currentGenerator) {
 	damping = 0.99f;
 	Vector3 nGravity;
-	Vector3 airV = Vector3(1, 0, 0);
+	Vector3 airV = Vector3(0, 0, 1);
 	float nAir = 10;
 	switch (currentGenerator)
 	{
@@ -171,7 +171,7 @@ Particle* ParticleSystem::newParticle() {
 void ParticleSystem::iParticles(double t) {
 	timer += t;
 	for (auto g = _particle_generators.begin(); g != _particle_generators.end(); ++g) {
-		if (count < (*g)->getNumParticles()) {
+		if (count < (*g)->getNumParticles() && count >= 0) {
 			std::list<Particle*> aux;
 			aux = (*g)->generateParticle();
 			for (auto gp = aux.begin(); gp != aux.end(); ++gp) {
@@ -191,10 +191,35 @@ void ParticleSystem::iParticles(double t) {
 			elastica1 = false;
 		}
 
+		if (elastica2) {
+			muelles2();
+			elastica2 = false;
+		}
+
+		if (elastica3) {
+			muelles3();
+			elastica3 = false;
+		}
+
+		if (elastica4) {
+			muelles4();
+			elastica4 = false;
+		}
+
+		if (elastica5) {
+			muelles5();
+			elastica5 = false;
+		}
+
 		for (auto shot = particles.begin(); shot != particles.end(); ++shot)
 		{
 			if ((*shot)->type != Particle::UNUSED)
 			{
+				if(gravedad)
+					_pfr.addRegistry(gr, *shot);
+				else
+					_pfr.deleteParticleForceRegistry(gr, *shot);
+
 				if (timer > 3 && explosion) {
 					_pfr.addRegistry(eF, *shot);
 					if(timer > 4)
@@ -204,7 +229,7 @@ void ParticleSystem::iParticles(double t) {
 				_pfr.updateForces(t);
 				(*shot)->integrate(t);
 				// Remove particle if invalid
-				if ((*shot)->getPosition().p.y < 0.0f ||
+				if ((*shot)->getPosition().p.y < -1000.0f ||
 					(*shot)->time >(*shot)->getLifeTime() ||
 					(*shot)->getPosition().p.y > 500.0f)
 				{
@@ -300,46 +325,237 @@ void ParticleSystem::air(Particle* p) {
 			_pfr.deleteParticleForceRegistry(aV, p);
 		}
 	}	
+	else 
+		_pfr.deleteParticleForceRegistry(aV, p);
 }
 
 void ParticleSystem::muelles1() {
-	/*Particle* p1;
-	Particle* p2;
-	p1 = new Particle(Vector4(1,1,1,1), Vector3(0, 50, 10),
-		Vector3(0, 0, 0),
-		Vector3(0,0,0), 0.99f, Particle::ACTIVE, &physx::PxSphereGeometry(5.0f), 1/2.0f);
+
+	// Muelle fijo
+	Particle* p3 = new Particle(Vector4(1, 1, 1, 1), Vector3(-50, 100, 0),
+		Vector3(0, 0, 0), Vector3(0, 0, 0), 0.85,
+		Particle::ACTIVE, &physx::PxSphereGeometry(5.0f), 1 / 2.0f);
+	p3->setLifeTime(60);
+	particles.push_back(p3);
+
+	aSF = new AnchoredSpringForceGenerator(5, 10, Vector3(-30, 100, 0));
+	_pfr.addRegistry(aSF, p3);
+	_fg.push_back(aSF);
+
+}
+
+void ParticleSystem::muelles2() {
+
+	// Muelle no fijo
+	Particle* p1 = new Particle(Vector4(1,1,1,1), Vector3(-10,10,0),
+		Vector3(0,0,0), Vector3(0,0,0), 0.85,
+		Particle::ACTIVE, &physx::PxSphereGeometry(5.0f), 1/2.0f);
 	p1->setLifeTime(60);
 	particles.push_back(p1);
 
-	p2 = new Particle(Vector4(1, 1, 1, 1), Vector3(0, 50, -10),
-		Vector3(0, 0, 0),
-		Vector3(0, 0, 0), 0.99f, Particle::ACTIVE, &physx::PxSphereGeometry(5.0f), 1 / 2.0f);
-	p2->setLifeTime(60);
-	particles.push_back(p2);
-
-	sF = new SpringForceGenerator(-5, (p2->getPosition().p).magnitude(), p2);
-
-	_pfr.addRegistry(sF,p1);
-	_fg.push_back(sF);*/
-
-	Particle* p1 = new Particle(Vector4(1,1,1,1), Vector3(-10,10,0), 
-		Vector3(0,0,0), Vector3(0,0,0), 0.99, 
-		Particle::ACTIVE, &physx::PxSphereGeometry(5.0f), 0);
-	p1->setLifeTime(60);
-	particles.push_back(p1);
-
-	Particle* p2 = new Particle(Vector4(1,1,1,1), Vector3(10,10,0), 
-		Vector3(0,0,0), Vector3(0,0,0), 0.99, 
+	Particle* p2 = new Particle(Vector4(1,1,1,1), Vector3(20,10,0),
+		Vector3(0,0,0), Vector3(0,0,0), 0.85,
 		Particle::ACTIVE, &physx::PxSphereGeometry(5.0f), 1 / 2.0f);
 	p2->setLifeTime(60);
 	particles.push_back(p2);
 
-	sF = new SpringForceGenerator(-5, 10, p2);
+	sF = new SpringForceGenerator(1, 20, p2);
 	_pfr.addRegistry(sF, p1);
 	_fg.push_back(sF);
 
-	sF = new SpringForceGenerator(5, 10, p1);
+	sF = new SpringForceGenerator(1, 20, p1);
 	_pfr.addRegistry(sF, p2);
 	_fg.push_back(sF); 
+
 }
+
+void ParticleSystem::muelles3() {
+
+	// Goma elástica
+	Particle* p1 = new Particle(Vector4(1, 1, 1, 1), Vector3(30, 50, 0),
+		Vector3(0, 0, 0), Vector3(0, 0, 0), 0.85,
+		Particle::ACTIVE, &physx::PxSphereGeometry(5.0f), 1 / 2.0f);
+	p1->setLifeTime(60);
+	particles.push_back(p1);
+
+	Particle* p2 = new Particle(Vector4(1, 1, 1, 1), Vector3(0, 50, 0),
+		Vector3(0, 0, 0), Vector3(0, 0, 0), 0.85,
+		Particle::ACTIVE, &physx::PxSphereGeometry(5.0f), 1 / 2.0f);
+	p2->setLifeTime(60);
+	particles.push_back(p2);
+
+	rSF = new RubberSrpingForceGenerator(0.1, 20, p2, 20);
+	_pfr.addRegistry(rSF, p1);
+	_fg.push_back(rSF);
+
+	rSF = new RubberSrpingForceGenerator(0.1, 20, p1, 20);
+	_pfr.addRegistry(rSF, p2);
+	_fg.push_back(rSF);
+
+	// Goma elástica extremo fijo
+	/*Particle* p1 = new Particle(Vector4(1, 1, 1, 1), Vector3(30, 50, 0),
+		Vector3(0, 0, 0), Vector3(0, 0, 0), 0.85,
+		Particle::ACTIVE, &physx::PxSphereGeometry(5.0f), 0);
+	p1->setLifeTime(60);
+	particles.push_back(p1);
+
+	Particle* p2 = new Particle(Vector4(1, 1, 1, 1), Vector3(0, 50, 0),
+		Vector3(0, 0, 0), Vector3(0, 0, 0), 0.85,
+		Particle::ACTIVE, &physx::PxSphereGeometry(5.0f), 1 / 2.0f);
+	p2->setLifeTime(60);
+	particles.push_back(p2);
+
+	rSF = new RubberSrpingForceGenerator(0.1, 20, p2, 20);
+	_pfr.addRegistry(rSF, p1);
+	_fg.push_back(rSF);
+
+	rSF = new RubberSrpingForceGenerator(0.1, 20, p1, 20);
+	_pfr.addRegistry(rSF, p2);
+	_fg.push_back(rSF);*/
+
+}
+
+void ParticleSystem::muelles4() {
+
+	int k = 2;
+	int x0 = 15;
+
+	// Muelle no fijo
+	Particle* p1 = new Particle(Vector4(1, 1, 1, 1), Vector3(20, 100, 0),
+		Vector3(0, 0, 0), Vector3(0, 0, 0), 0.85,
+		Particle::ACTIVE, &physx::PxSphereGeometry(5.0f), 1 / 2.0f);
+	p1->setLifeTime(60);
+	particles.push_back(p1);
+
+	Particle* p2 = new Particle(Vector4(1, 1, 1, 1), Vector3(20, 90, 0),
+		Vector3(0, 0, 0), Vector3(0, 0, 0), 0.85,
+		Particle::ACTIVE, &physx::PxSphereGeometry(5.0f), 1 / 2.0f);
+	p2->setLifeTime(60);
+	particles.push_back(p2);
+
+	Particle* p3 = new Particle(Vector4(1, 1, 1, 1), Vector3(20, 80, 0),
+		Vector3(0, 0, 0), Vector3(0, 0, 0), 0.85,
+		Particle::ACTIVE, &physx::PxSphereGeometry(5.0f), 1 / 2.0f);
+	p3->setLifeTime(60);
+	particles.push_back(p3);
+
+	Particle* p4 = new Particle(Vector4(1, 1, 1, 1), Vector3(20, 70, 0),
+		Vector3(0, 0, 0), Vector3(0, 0, 0), 0.85,
+		Particle::ACTIVE, &physx::PxSphereGeometry(5.0f), 1 / 2.0f);
+	p4->setLifeTime(60);
+	particles.push_back(p4);
+
+	Particle* p5 = new Particle(Vector4(1, 1, 1, 1), Vector3(20, 60, 0),
+		Vector3(0, 0, 0), Vector3(0, 0, 0), 0.85,
+		Particle::ACTIVE, &physx::PxSphereGeometry(5.0f), 1 / 2.0f);
+	p5->setLifeTime(60);
+	particles.push_back(p5);
+
+	Particle* p6 = new Particle(Vector4(1, 1, 1, 1), Vector3(20, 50, 0),
+		Vector3(0, 0, 0), Vector3(0, 0, 0), 0.85,
+		Particle::ACTIVE, &physx::PxSphereGeometry(5.0f), 1 / 2.0f);
+	p6->setLifeTime(60);
+	particles.push_back(p6);
+
+	sF = new SpringForceGenerator(k, x0, p2);
+	_pfr.addRegistry(sF, p1);
+	_fg.push_back(sF);
+
+	sF = new SpringForceGenerator(k, x0, p1);
+	_pfr.addRegistry(sF, p2);
+	_fg.push_back(sF);
+
+	sF = new SpringForceGenerator(k, x0, p3);
+	_pfr.addRegistry(sF, p2);
+	_fg.push_back(sF);
+
+	sF = new SpringForceGenerator(k, x0, p2);
+	_pfr.addRegistry(sF, p3);
+	_fg.push_back(sF);
+
+	sF = new SpringForceGenerator(k, x0, p4);
+	_pfr.addRegistry(sF, p3);
+	_fg.push_back(sF);
+
+	sF = new SpringForceGenerator(k, x0, p3);
+	_pfr.addRegistry(sF, p4);
+	_fg.push_back(sF);
+
+	sF = new SpringForceGenerator(k, x0, p5);
+	_pfr.addRegistry(sF, p4);
+	_fg.push_back(sF);
+
+	sF = new SpringForceGenerator(k, x0, p4);
+	_pfr.addRegistry(sF, p5);
+	_fg.push_back(sF);
+
+	sF = new SpringForceGenerator(k, x0, p6);
+	_pfr.addRegistry(sF, p5);
+	_fg.push_back(sF);
+
+	sF = new SpringForceGenerator(k, x0, p5);
+	_pfr.addRegistry(sF, p6);
+	_fg.push_back(sF);
+}
+
+void ParticleSystem::muelles5() {
+
+	float m = 20.0f;
+	float h = 5;
+	float v = h*h*h;
+	float d = m / v;
+
+	// Goma elástica
+	bP = new Particle(Vector4(1, 1, 1, 1), Vector3(0, 50, 0),
+		Vector3(0, 0, 0), Vector3(0, 0, 0), 0.85,
+		Particle::ACTIVE, &physx::PxBoxGeometry(h, h, h), 1 / m);
+	bP->setLifeTime(60);
+	particles.push_back(bP);
+
+	bSF = new BuoyancyForceGenerator(h, v, d);
+	_pfr.addRegistry(bSF, bP);
+	_fg.push_back(rSF);
+}
+
+
+void ParticleSystem::aumK() {
+	aSF->setK(aSF->getK() + 0.1);
+	std::cout << aSF->getK() << std::endl;
+}
+
+void ParticleSystem::disK() {
+	aSF->setK(aSF->getK() - 0.1);
+	std::cout << aSF->getK() << std::endl;
+}
+
+void ParticleSystem::setG() {
+	gravedad = !gravedad;
+}
+
+void ParticleSystem::setW() {
+	viento = !viento;
+	std::cout << viento << std::endl;
+	
+}
+
+void ParticleSystem::aumM() {
+	bP->setInvM(bP->getInvM() + 0.01);
+	std::cout << bP->getInvM() << std::endl;
+}
+
+void ParticleSystem::disM() {
+	bP->setInvM(bP->getInvM() - 0.01);
+	std::cout << bP->getInvM() << std::endl;
+}
+
+void ParticleSystem::aumV() {
+	bSF->setV(bSF->getV() + 15);
+	std::cout << bSF->getV() << std::endl;
+}
+
+void ParticleSystem::disV() {
+	bSF->setV(bSF->getV() - 15);
+	std::cout << bSF->getV() << std::endl;
+}
+
 

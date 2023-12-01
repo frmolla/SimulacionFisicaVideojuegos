@@ -61,8 +61,8 @@ void init() {
 	sM0 = new ShotManager(0);
 	sM1 = new ShotManager(1);
 	sM2 = new ShotManager(2);
-	ground = new Plane(Vector4(0.5, 0.5, 0.5, 1), Vector3(0, 0, 0), Vector3(300, 5, 300));
-	target = new Plane(Vector4(1, 0, 0, 1), Vector3(-100, 50, -100), Vector3(5, 5, 5));
+	//ground = new Plane(Vector4(0.5, 0.5, 0.5, 1), Vector3(0, 0, 0), Vector3(300, 5, 300));
+	//target = new Plane(Vector4(1, 0, 0, 1), Vector3(-100, 50, -100), Vector3(5, 5, 5));
 	pF = new ParticleSystem(0);
 	pN = new ParticleSystem(1);
 	pL = new ParticleSystem(2);
@@ -223,6 +223,58 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		m = !m;
 		break;
 	}
+	case 'H': {
+		m1->setE1();
+		break;
+	}
+	case 'J': {
+		m1->setE2();
+		break;
+	}
+	case 'K': {
+		m1->setE3();
+		break;
+	}
+	case 'L': {
+		m1->setE4();
+		break;
+	}
+	case 'P': {
+		m1->setE5();
+		break;
+	}
+	case '+': {
+		m1->aumK();
+		break;
+	}
+	case 'I': {
+		m1->aumM();
+		break;
+	}
+	case 'O': {
+		m1->disM();
+		break;
+	}
+	case 'Y': {
+		m1->aumV();
+		break;
+	}
+	case 'U': {
+		m1->disV();
+		break;
+	}
+	case '-': {
+		m1->disK();
+		break;
+	}
+	case '8': {
+		m1->setW();
+		break;
+	}
+	case '9': {
+		m1->setG();
+		break;
+	}	
 	case ' ':
 	{
 		break;

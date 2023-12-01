@@ -18,6 +18,8 @@
 #include "ExplosionForceGenerator.h"
 #include "SpringForceGenerator.h"
 #include "AnchoredSpringForceGenerator.h"
+#include "RubberSrpingForceGenerator.h"
+#include "BuoyancyForceGenerator.h"
 
 class ParticleSystem
 {
@@ -35,6 +37,20 @@ public:
 	void setGenerator(int currentGenerator);
 	Particle* newParticle();
 
+	void aumK();
+	void disK();
+	void aumM();
+	void disM();
+	void aumV();
+	void disV();
+	void setG();
+	void setW();
+	inline void setE1() { elastica1 = true; }
+	inline void setE2() { elastica2 = true; }
+	inline void setE3() { elastica3 = true; }
+	inline void setE4() { elastica4 = true; }
+	inline void setE5() { elastica5 = true; }
+
 private:
 	int currentShotType;
 
@@ -50,6 +66,8 @@ private:
 	Vector3 vel;
 	Vector3 _gravity = Vector3(0, -10, 0);
 	physx::PxTransform pos;
+
+	Particle* bP = nullptr;
 
 	std::list<std::list<Particle*>> newE;
 
@@ -69,6 +87,9 @@ private:
 	WhirlwindForceGenerator* wV;
 	ExplosionForceGenerator* eF;
 	SpringForceGenerator* sF;
+	AnchoredSpringForceGenerator* aSF;
+	RubberSrpingForceGenerator* rSF;
+	BuoyancyForceGenerator* bSF;
 
 	void onParticleDeath(Particle* p);
 	void createFireworksSystem();
@@ -76,11 +97,19 @@ private:
 	void iFireworks(double t);
 	void air(Particle* p);
 	void muelles1();
+	void muelles2();
+	void muelles3();
+	void muelles4();
+	void muelles5();
 
 	bool viento = false;
-	bool explosion = true;
+	bool explosion = false;
 	bool torbellino = false;
 	bool gravedad = false;
-	bool elastica1 = true;
+	bool elastica1 = false;
+	bool elastica2 = false;
+	bool elastica3 = false;
+	bool elastica4 = false;
+	bool elastica5 = false;
 };
 

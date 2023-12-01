@@ -32,6 +32,7 @@ public:
 	Vector3 force = Vector3(0,0,0);
 	inline void addForce(Vector3 f) { force += f; }
 	inline void clearForce() { force *= 0.0; }
+	inline void setInvM(float vInvM) { invM = vInvM; }
 
 protected:
 	Vector4 color;
