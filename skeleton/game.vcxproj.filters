@@ -30,6 +30,7 @@
     <ClCompile Include="AnchoredSpringForceGenerator.cpp" />
     <ClCompile Include="RubberSrpingForceGenerator.cpp" />
     <ClCompile Include="BuoyancyForceGenerator.cpp" />
+    <ClCompile Include="RigidBody.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -61,6 +62,7 @@
     <ClInclude Include="AnchoredSpringForceGenerator.h" />
     <ClInclude Include="RubberSrpingForceGenerator.h" />
     <ClInclude Include="BuoyancyForceGenerator.h" />
+    <ClInclude Include="RigidBody.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

@@ -395,7 +395,7 @@ void ParticleSystem::muelles3() {
 	// Goma elástica extremo fijo
 	/*Particle* p1 = new Particle(Vector4(1, 1, 1, 1), Vector3(30, 50, 0),
 		Vector3(0, 0, 0), Vector3(0, 0, 0), 0.85,
-		Particle::ACTIVE, &physx::PxSphereGeometry(5.0f), 0);
+		Particle::ACTIVE, &physx::PxBoxGeometry(5, 5, 5), 0);
 	p1->setLifeTime(60);
 	particles.push_back(p1);
 
@@ -502,7 +502,7 @@ void ParticleSystem::muelles5() {
 
 	float m = 20.0f;
 	float h = 5;
-	float v = h*h*h;
+	float v = h*h*h/1000;
 	float d = m / v;
 
 	// Goma elástica
@@ -549,12 +549,12 @@ void ParticleSystem::disM() {
 }
 
 void ParticleSystem::aumV() {
-	bSF->setV(bSF->getV() + 15);
+	bSF->setV(bSF->getV() + 0.1);
 	std::cout << bSF->getV() << std::endl;
 }
 
 void ParticleSystem::disV() {
-	bSF->setV(bSF->getV() - 15);
+	bSF->setV(bSF->getV() - 0.1);
 	std::cout << bSF->getV() << std::endl;
 }
 
