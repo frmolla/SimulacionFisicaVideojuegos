@@ -82,13 +82,13 @@ void RigidBodySystem::setGenerator(int currentGenerator) {
 		color = Vector4(randomFloat(), randomFloat(), randomFloat(), 1);
 		rb = new RigidBody(true, &physx::PxBoxGeometry(5,5,5),
 			_gPhysics, _gScene ,Vector3(0,30,0), color, 10);
-		generateSystem(rb, currentGenerator, "rbD", 10);
+		generateSystem(rb, currentGenerator, "rbD", 15);
 		break;
 	case STATIC:
 		color = Vector4(randomFloat(), randomFloat(), randomFloat(), 1);
 		rb = new RigidBody(false, &physx::PxBoxGeometry(5,5,5),
 			_gPhysics, _gScene, Vector3(0, 0, 0), color, 10);
-		generateSystem(rb, currentGenerator, "rbS", 10);
+		generateSystem(rb, currentGenerator, "rbS", 15);
 		break;
 	}
 

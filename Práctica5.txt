@@ -1,0 +1,28 @@
+Clase Scene:
+Todo lo relacionado con la práctica 5 se trabaja desde la clase scene.
+- Se tiene un suelo que es un rb estático que hace de suelo generado manualmente y un sistema de rb dinámicos (está generalizado para ser de rb estáticos, bástaría con cambiar su tercer parámetro de la constructora a 1).
+- Se tiene un método integrate que llama a los integrate de los sistemas de rb.
+
+Clase RigidBodySystem:
+Los rb se gestionan desde está clase.
+En la constructora se setea si es de rb estáticos o dinámicos llamando al método setGenerator.
+El método integrate crea y destruye los rb y aplica las fuerzas de los generadores propios si están activos los booleanos correspondientes presente en el .h.
+
+Clase UniformRBGenerator:
+Crea rb y los devuelve como una lista para que se añadan a la lista de rb de RigidBodySystem.
+
+Clase RigidBody:
+Crea rb de acuerdo a los parametros dados en la constructora con un booleano se distingue si es static o dynamic.
+
+Clases generadores de fuerzas:
+Se han añadido las fuerzas del viento, el torbellino y la explosión se pueden probar activando el booleano correspondiente en RigidBodySystem.
+Las clases son las mismas que las de las particulas pero se ha añadido otro método igual pero para los rb utilizando el método addForce de physx.
+
+Otros:
+Se han probado distintos materiales estan comentados en main.cpp (se han probado los casos 0 y 1).
+Se han probado distintas masas (aplicando distintas densidades) esto se encuentra en UniformRBGenerator, si en la constructora de los rb dynamic no se
+añade el último parámetro se le asigna el valor por defecto 0.15.
+Se pueden asignar forma de cuboides cambiando la forma desde UniformRBGenerator en el swicth.
+Se ha probado ha modificar el tensor de incia, se puede probar desde RigidBody.
+
+- Puede ser conveniente hacer retroceder la cámara para ver más claramente la situación.

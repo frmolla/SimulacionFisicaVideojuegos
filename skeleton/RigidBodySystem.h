@@ -48,6 +48,6 @@ private:
 
 	bool viento = false;
 	bool torbellino = false;
-	bool explosion = true;
+	bool explosion = false;
 };
 

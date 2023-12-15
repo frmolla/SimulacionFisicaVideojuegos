@@ -7,11 +7,13 @@ class RigidBody
 public:
 	enum states { UNUSED, ACTIVE };
 
-	RigidBody(bool dyn, physx::PxGeometry* nGeo, physx::PxPhysics* gPhysics, physx::PxScene* gScene, Vector3 pos, Vector4 nColor, float life_time);
+	RigidBody(bool dyn, physx::PxGeometry* nGeo, physx::PxPhysics* gPhysics, physx::PxScene* gScene, Vector3 pos, Vector4 nColor, float life_time, float mI = 0.15f);
 	~RigidBody();
 
 	int type;
 	float time = 0;
+
+	float _mI;
 
 	inline physx::PxTransform getPosition() { return (_dyn) ? rb->getGlobalPose() : st->getGlobalPose(); }
 
