@@ -274,10 +274,14 @@
     <ClCompile Include="Render\Camera.cpp" />
     <ClCompile Include="Render\Render.cpp" />
     <ClCompile Include="RigidBody.cpp" />
+    <ClCompile Include="RigidBodyGenerator.cpp" />
+    <ClCompile Include="RigidBodySystem.cpp" />
     <ClCompile Include="RubberSrpingForceGenerator.cpp" />
+    <ClCompile Include="Scene.cpp" />
     <ClCompile Include="ShotManager.cpp" />
     <ClCompile Include="SpringForceGenerator.cpp" />
     <ClCompile Include="UniformParticleGenerator.cpp" />
+    <ClCompile Include="UniformRBGenerator.cpp" />
     <ClCompile Include="WhirlwindForceGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -302,10 +306,14 @@
     <ClInclude Include="Render\Camera.h" />
     <ClInclude Include="Render\Render.h" />
     <ClInclude Include="RigidBody.h" />
+    <ClInclude Include="RigidBodyGenerator.h" />
+    <ClInclude Include="RigidBodySystem.h" />
     <ClInclude Include="RubberSrpingForceGenerator.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="ShotManager.h" />
     <ClInclude Include="SpringForceGenerator.h" />
     <ClInclude Include="UniformParticleGenerator.h" />
+    <ClInclude Include="UniformRBGenerator.h" />
     <ClInclude Include="WhirlwindForceGenerator.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

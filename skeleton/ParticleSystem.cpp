@@ -230,7 +230,7 @@ void ParticleSystem::iParticles(double t) {
 				(*shot)->integrate(t);
 				// Remove particle if invalid
 				if ((*shot)->getPosition().p.y < -1000.0f ||
-					(*shot)->time >(*shot)->getLifeTime() ||
+					(*shot)->time > (*shot)->getLifeTime() ||
 					(*shot)->getPosition().p.y > 500.0f)
 				{
 					// Free the slot

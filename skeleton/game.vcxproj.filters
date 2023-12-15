@@ -31,6 +31,10 @@
     <ClCompile Include="RubberSrpingForceGenerator.cpp" />
     <ClCompile Include="BuoyancyForceGenerator.cpp" />
     <ClCompile Include="RigidBody.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="RigidBodySystem.cpp" />
+    <ClCompile Include="RigidBodyGenerator.cpp" />
+    <ClCompile Include="UniformRBGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -63,6 +67,10 @@
     <ClInclude Include="RubberSrpingForceGenerator.h" />
     <ClInclude Include="BuoyancyForceGenerator.h" />
     <ClInclude Include="RigidBody.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="RigidBodySystem.h" />
+    <ClInclude Include="RigidBodyGenerator.h" />
+    <ClInclude Include="UniformRBGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

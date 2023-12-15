@@ -13,5 +13,6 @@ public:
 	ExplosionForceGenerator();
 	ExplosionForceGenerator(const float k, float r, Vector3 o = Vector3(0, 0, 0));
 	virtual void updateForce(Particle* particle, double t);
+	virtual void updateForce(RigidBody* particle, double t);
 };
 

@@ -2,17 +2,17 @@
 #include <string>
 #include <list>
 #include "core.hpp"
-#include "Particle.h"
+#include "RigidBody.h"
 #include <random>
 #include <string>
 
-class ParticleGenerator
+class RigidBodyGenerator
 {
 public:
-	ParticleGenerator(std::string name, int numP); 
-	~ParticleGenerator();
-	void setParticle(Particle* model); 
-	virtual std::list<Particle*> generateParticle() = 0;
+	RigidBodyGenerator(std::string name, int numP); 
+	~RigidBodyGenerator(); 
+	void setRB(RigidBody* model); 
+	virtual std::list<RigidBody*> generateRB() = 0;
 	inline void setOrigin(const Vector3& p) { _mean_pos = p; }
 	inline void setMeanVelocity(const Vector3& v) {
 		_mean_vel = v;
@@ -23,7 +23,7 @@ public:
 	inline void setMeanDuration(double new_duration) {
 		_model->setLifeTime(new_duration);
 	}
-	inline void setParticle(Particle* p, bool modify_pos_vel = true) {
+	inline void setRB(RigidBody* p, bool modify_pos_vel = true) {
 		delete _model;
 		_model = p->clone();
 		if (modify_pos_vel) {
@@ -32,13 +32,13 @@ public:
 		}
 		_model->setPosition({ -1000.0f, -1000.0f, -1000.0f });
 	}
-	inline void setNParticles(int n_p) { _num_particles = n_p; }
-	inline int getNumParticles() { return _num_particles; }
+	inline void setNRB(int n_p) { _num_RB = n_p; }
+	inline int getNumRB() { return _num_RB; }
 	inline std::string getName() { return _name; }
 protected:
-	int _num_particles = 1;
+	int _num_RB = 1;
 	double _generation_probability = 1;
-	Particle* _model = nullptr;
+	RigidBody* _model = nullptr;
 	Vector3 _mean_pos, _mean_vel;
 	std::mt19937 _mt;
 	std::uniform_real_distribution<double> _u{ 0,1 };

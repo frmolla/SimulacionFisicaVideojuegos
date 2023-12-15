@@ -26,14 +26,18 @@ void ParticleDragGenerator::updateForce(Particle* particle, double t) {
 	// Apply the drag force
 	//std::cout << dragF.x << "\t" << dragF.y << "\t" << dragF.z << "\n";
 	particle->addForce(dragF);
-
-	//// Compute the drag force
-	//Vector3 v = particle->getVelocity();
-	//float drag_coef = v.normalize();
-	//Vector3 dragF;
-	//drag_coef = _k1 * drag_coef + _k2 * drag_coef * drag_coef;
-	//dragF = -v * drag_coef;
-	//// Apply the drag force
-	////std::cout << dragF.x << "\t" << dragF.y << "\t" << dragF.z << "\n";
-	//particle->addForce(dragF);
 }
+
+void ParticleDragGenerator::updateForce(RigidBody* particle, double t) {
+	// Compute the drag force
+	Vector3 v = particle->getVelocity();
+	float drag_coef = v.normalize();
+	Vector3 dragF;
+	drag_coef = _k1 * drag_coef + _k2 * drag_coef * drag_coef;
+	dragF = (_airVelocity - v) * drag_coef;
+	dragF = _k1 * (_airVelocity - v);
+	// Apply the drag force
+	//std::cout << dragF.x << "\t" << dragF.y << "\t" << dragF.z << "\n";
+	particle->getDynamicObj()->addForce(dragF);
+}
+

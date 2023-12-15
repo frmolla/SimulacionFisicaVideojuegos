@@ -7,6 +7,7 @@ public:
 	BuoyancyForceGenerator(float h, float v, float d);
 
 	virtual void updateForce(Particle* particle, double t);
+	virtual void updateForce(RigidBody* particle, double t) {}
 
 	virtual ~BuoyancyForceGenerator() {};
 

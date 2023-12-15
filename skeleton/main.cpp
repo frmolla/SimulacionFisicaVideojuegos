@@ -13,6 +13,7 @@
 #include "ShotManager.h"
 #include "Plane.h"
 #include "ParticleSystem.h"
+#include "Scene.h"
 
 std::string display_text = "SIM_FIS";
 
@@ -49,6 +50,8 @@ ParticleSystem* f2;
 ParticleSystem* f3;
 ParticleSystem* m1;
 
+Scene* s;
+
 bool f = false;
 bool fO = false;
 bool r = false;
@@ -70,6 +73,8 @@ void init() {
 	f2 = new ParticleSystem(4);
 	f3 = new ParticleSystem(5);
 	m1 = new ParticleSystem(6);
+
+	s = new Scene(gPhysics, gScene);
 }
 
 void free() {
@@ -85,6 +90,7 @@ void free() {
 	delete(f2);
 	delete(f3);
 	delete(m1);
+	delete(s);
 }
 
 void integrate(double t) {
@@ -112,6 +118,8 @@ void integrate(double t) {
 	if (m) {
 		m1->integrate(t);
 	}
+
+	s->integrate(t);
 }
 
 // Initialize physics engine
@@ -180,6 +188,8 @@ void cleanupPhysics(bool interactive)
 void keyPress(unsigned char key, const PxTransform& camera)
 {
 	PX_UNUSED(camera);
+
+	s->keyPress(key);
 
 	switch(toupper(key))
 	{

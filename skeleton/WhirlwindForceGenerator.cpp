@@ -19,4 +19,15 @@ void WhirlwindForceGenerator::updateForce(Particle* particle, double t) {
 	ParticleDragGenerator::updateForce(particle,t);
 }
 
+void WhirlwindForceGenerator::updateForce(RigidBody* particle, double t) {
+
+	if ((particle->getPosition().p - ori).magnitude() < _r) {
+		_airVelocity.x = -(particle->getPosition().p.z - ori.z);
+		_airVelocity.y = (80 - (particle->getPosition().p.y - ori.y));
+		_airVelocity.z = ((particle->getPosition().p.x - ori.x));
+	}
+
+	ParticleDragGenerator::updateForce(particle, t);
+}
+
 

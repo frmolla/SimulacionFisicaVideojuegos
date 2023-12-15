@@ -8,6 +8,7 @@ private:
 public:
 	RubberSrpingForceGenerator(float k, float x0, Particle* p, float dis);
 	virtual void updateForce(Particle* particle, double t);
+	virtual void updateForce(RigidBody* particle, double t) {}
 };
 
 

@@ -11,4 +11,4 @@ void GravityForceGenerator::updateForce(Particle* particle, double t) {
 	// aqui deberia ser la masa
 	float masa = 1 / particle->getInvM();
 	particle->addForce(_gravity * masa);
-}
+};
