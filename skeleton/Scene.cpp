@@ -84,18 +84,22 @@ void Scene::collisionS(physx::PxActor* actor1, physx::PxActor* actor2, int & v) 
 	if (actor1 == player1->getST()) {
 		// win player2
 		v = 1;
+		end = false;
 	}
 	else if (actor2 == player1->getST()) {
 		// win player2
 		v = 1;
+		end = false;
 	}
 	else if (actor1 == player2->getST()) {
 		// win player 1
 		v = 0;
+		end = false;
 	}
 	else if (actor2 == player2->getST()) {
 		// win player 1
 		v = 0;
+		end = false;
 	}
 	if (actor1->getName() == "plat" || actor2->getName() == "plat") {
 		rbD->col();
