@@ -51,7 +51,7 @@ void RigidBodySystem::integrate(double t) {
 					(*shot)->getPosition().p.y > 500.0f || colAux)
 				{
 					// Free the slot
-					colAux = false;
+					colAux = false; 
 					(*shot)->type = RigidBody::UNUSED;
 				}
 			}

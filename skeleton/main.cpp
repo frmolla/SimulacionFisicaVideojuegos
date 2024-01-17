@@ -69,6 +69,7 @@ int angleAux = 0;
 int velAux = 0;
 
 float timer = 0;
+float timerAUX = 0;
 
 void init() {
 	sM0 = new ShotManager(0);
@@ -115,6 +116,7 @@ void reset() {
 void integrate(double t) {
 	if (win != -1)
 		timer += t;
+	timerAUX += t;
 	sM0->integrate(t);
 	sM1->integrate(t);
 	sM2->integrate(t);
@@ -145,6 +147,11 @@ void integrate(double t) {
 	if (timer > 10) {
 		reset();
 		timer = 0;
+	}
+
+	if (timerAUX > 10 && s->getColM()) {
+		timerAUX = 0;
+		s->setColM(false);
 	}
 }
 
@@ -258,6 +265,7 @@ void keyPress(unsigned char key, const PxTransform& camera)
 			angleV = std::to_string(angleAux);
 			velV = std::to_string(velAux);
 			text = (text + 1) % 2;
+			timerAUX = 0;
 		}	
 		break;
 	}

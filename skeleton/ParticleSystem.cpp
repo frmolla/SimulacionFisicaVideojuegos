@@ -348,7 +348,7 @@ void ParticleSystem::muelles1() {
 	Particle* p3 = new Particle(Vector4(1, 1, 1, 1), Vector3(0, 130, 0),
 		Vector3(0, 0, 0), Vector3(0, 0, 0), 0.85,
 		Particle::ACTIVE, &physx::PxSphereGeometry(5.0f), 1 / 2.0f);
-	p3->setLifeTime(60);
+	p3->setLifeTime(1000);
 	particles.push_back(p3);
 
 	aSF = new AnchoredSpringForceGenerator(5, 10, Vector3(0, 150, 0));
