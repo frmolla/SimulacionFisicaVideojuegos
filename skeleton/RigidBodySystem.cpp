@@ -1,7 +1,8 @@
 #include "RigidBodySystem.h"
 
-RigidBodySystem::RigidBodySystem(physx::PxPhysics* gPhysics, physx::PxScene* gScene, int currentGenerator)
+RigidBodySystem::RigidBodySystem(physx::PxPhysics* gPhysics, physx::PxScene* gScene, int currentGenerator, int pR)
  : _gPhysics(gPhysics), _gScene(gScene) {
+	_pR = pR;
 	setGenerator(currentGenerator);
 }
 
@@ -14,7 +15,7 @@ void RigidBodySystem::integrate(double t) {
 
 	timer += t;
 	for (auto g = _gens.begin(); g != _gens.end(); ++g) {
-		if (count < (*g)->getNumRB() && count >= 0) {
+		/*if (count < (*g)->getNumRB() && count >= 0) {
 			std::list<RigidBody*> aux;
 			aux = (*g)->generateRB();
 			for (auto gp = aux.begin(); gp != aux.end(); ++gp) {
@@ -25,6 +26,10 @@ void RigidBodySystem::integrate(double t) {
 				count++;
 			}
 
+		}*/
+		if (lanzado) {
+			lanzar(_p, _v);
+			lanzado = false;
 		}
 
 		for (auto shot = rigid_bodys.begin(); shot != rigid_bodys.end(); ++shot)
@@ -43,9 +48,10 @@ void RigidBodySystem::integrate(double t) {
 				(*shot)->time += t;
 				if ((*shot)->getPosition().p.y < -1000.0f ||
 					(*shot)->time > (*shot)->getLifeTime() ||
-					(*shot)->getPosition().p.y > 500.0f)
+					(*shot)->getPosition().p.y > 500.0f || colAux)
 				{
 					// Free the slot
+					colAux = false;
 					(*shot)->type = RigidBody::UNUSED;
 				}
 			}
@@ -57,6 +63,7 @@ void RigidBodySystem::integrate(double t) {
 				RigidBody* p = *it;
 				_pfr.deleteParticleRegistry(p);
 				it = rigid_bodys.erase(it);
+				p->getRB()->release();
 				delete(p);
 				count--;
 			}
@@ -79,10 +86,17 @@ void RigidBodySystem::setGenerator(int currentGenerator) {
 	{
 		RigidBody* rb;
 	case DYNAMIC:
-		color = Vector4(randomFloat(), randomFloat(), randomFloat(), 1);
-		rb = new RigidBody(true, &physx::PxBoxGeometry(5,5,5),
-			_gPhysics, _gScene ,Vector3(0,30,0), color, 10);
-		generateSystem(rb, currentGenerator, "rbD", 15);
+		if (_pR == 0) {
+			rb = new RigidBody(true, &physx::PxBoxGeometry(5, 5, 5),
+				_gPhysics, _gScene, Vector3(0, -30, 0), Vector4(1.0f, 1.0f, 0.0f, 1.0f), 10);
+			generateSystem(rb, currentGenerator, "rbD", 1);
+		}
+		else {
+			color = Vector4(randomFloat(), randomFloat(), randomFloat(), 1);
+			rb = new RigidBody(true, &physx::PxBoxGeometry(5, 5, 5),
+				_gPhysics, _gScene, Vector3(0, 30, 0), color, 10);
+			generateSystem(rb, currentGenerator, "rbD", 15);
+		}
 		break;
 	case STATIC:
 		color = Vector4(randomFloat(), randomFloat(), randomFloat(), 1);
@@ -100,16 +114,41 @@ void RigidBodySystem::setGenerator(int currentGenerator) {
 	_fg.push_back(eF);
 }
 
+void RigidBodySystem::lanzar(Vector3 p, Vector3 v) {
+	colAux = false;
+	for (auto g = _gens.begin(); g != _gens.end(); ++g) {
+		if (count < (*g)->getNumRB() && count >= 0) {
+			std::list<RigidBody*> aux;
+			if (_pR == 0)
+				(*g)->setL(p, v);
+			aux = (*g)->generateRB();
+			for (auto gp = aux.begin(); gp != aux.end(); ++gp) {
+				rigid_bodys.push_back(*gp);
+
+				if (torbellino)
+					_pfr.addRegistry(wV, *gp);
+				count++;
+			}
+
+		}
+	}
+}
+
 void RigidBodySystem::air(RigidBody* p) {
 	if (viento) {
-		if (p->getPosition().p.x < 80 && p->getPosition().p.x > -80
+		_pfr.addRegistry(aV, p);
+		/*if (p->getPosition().p.x < 80 && p->getPosition().p.x > -80
 			&& p->getPosition().p.z < 80 && p->getPosition().p.z > -80) {
 			_pfr.addRegistry(aV, p);
 		}
 		else {
 			_pfr.deleteParticleForceRegistry(aV, p);
-		}
+		}*/
 	}
 	else
 		_pfr.deleteParticleForceRegistry(aV, p);
+}
+
+void RigidBodySystem::col() {
+	colAux = true;
 }

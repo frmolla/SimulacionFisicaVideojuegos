@@ -24,7 +24,8 @@ public:
 	}
 
 	inline Vector3 getVelocity() {
-		return (_dyn) ? rb->getLinearVelocity() : Vector3(0,0,0);
+		//return (_dyn) ? rb->getLinearVelocity() : Vector3(0,0,0);
+		return _vel;
 	}
 
 	inline physx::PxRigidDynamic* getDynamicObj() {
@@ -47,6 +48,10 @@ public:
 		return new RigidBody(_dyn, _geo, _gPhysics, _gScene, _pos, _color, _life_time);
 	}
 
+	inline void setV(Vector3 vAux) { rb->setLinearVelocity({ vAux.x,vAux.y,vAux.z }); _vel = vAux; }
+
+	inline physx::PxRigidDynamic* getRB() { if (_dyn) return rb; else return NULL; }
+	inline physx::PxRigidStatic* getST() { if (!_dyn) return st; else return NULL; }
 private:
 	bool _dyn;
 	physx::PxGeometry* _geo;
@@ -58,6 +63,8 @@ private:
 
 	Vector3 _pos;
 	Vector4 _color;
+
+	Vector3 _vel = Vector3(0,0,0);
 
 	float _life_time;
 	RenderItem* rItem;

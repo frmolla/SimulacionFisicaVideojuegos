@@ -249,7 +249,7 @@ void setupDefaultWindow(const char *name)
 
 	glutInit(&argc, argv);
 	
-	glutInitWindowSize(512, 512);
+	glutInitWindowSize(1900, 1000);
 	glutInitDisplayMode(GLUT_RGB|GLUT_DOUBLE|GLUT_DEPTH);
 	int mainHandle = glutCreateWindow(name);
 	glutSetWindow(mainHandle);
@@ -261,7 +261,7 @@ void setupDefaultWindow(const char *name)
 void setupDefaultRenderState()
 {
 	// Setup default render states
-	glClearColor(0.3f, 0.4f, 0.5f, 1.0);
+	glClearColor(0.12f, 0.0f, 0.63f, 1.0);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_COLOR_MATERIAL);
 	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -270,7 +270,7 @@ void setupDefaultRenderState()
 
 	// Setup lighting
 	glEnable(GL_LIGHTING);
-	PxReal ambientColor[]	= { 0.0f, 0.1f, 0.2f, 0.0f };
+	PxReal ambientColor[]	= { 0.7f, 0.7f, 0.7f, 0.0f };
 	PxReal diffuseColor[]	= { 1.0f, 1.0f, 1.0f, 0.0f };		
 	PxReal specularColor[]	= { 0.0f, 0.0f, 0.0f, 0.0f };		
 	PxReal position[]		= { 100.0f, 100.0f, 400.0f, 1.0f };		
@@ -288,7 +288,25 @@ void startRender(const PxVec3& cameraEye, const PxVec3& cameraDir, PxReal clipNe
 
 	// Display text
 	glColor4f(1.0f, 0.2f, 0.2f, 1.0f);
-	drawText(display_text, 0, 0);
+	drawText(display_texts[0], 0, 0);
+	drawText(display_texts[1], 20, 500);
+	drawText(display_texts[2], 470, 500);
+	if (text == 0) {
+		drawText("angle: " + angleV, 20, 490);
+		drawText("vel: " + velV, 20, 480);
+	}
+	else {
+		drawText("angle: " + angleV, 470, 490);
+		drawText("vel: " + velV, 470, 480);
+	}
+	if (win == 0) {
+		std::string k = "PLAYER 1 WIN";
+		drawText(k, 256 - k.size() + 1, 450);
+	}
+	else if (win == 1){
+		std::string k = "PLAYER 2 WIN";
+		drawText(k, 256 - k.size() + 1, 450);
+	}
 
 	// Setup camera
 	glMatrixMode(GL_PROJECTION);

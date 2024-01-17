@@ -34,7 +34,7 @@ void ParticleForceRegistry::deleteParticleRegistry(Particle* p) {
 }
 
 void ParticleForceRegistry::deleteParticleRegistry(RigidBody* p) {
-	for (auto it = FaP.begin(); it != FaP.end(); ++it) {
+	for (auto it = FaRB.begin(); it != FaRB.end(); ++it) {
 		if (FaRB[it->first].find(p) != FaRB[it->first].end()) {
 			FaRB[it->first].erase(p);
 			RBaF[p].erase(it->first);

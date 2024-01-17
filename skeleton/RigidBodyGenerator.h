@@ -35,13 +35,17 @@ public:
 	inline void setNRB(int n_p) { _num_RB = n_p; }
 	inline int getNumRB() { return _num_RB; }
 	inline std::string getName() { return _name; }
+	inline void setL(Vector3 pAux, Vector3 vAux) { posL = pAux; velL = vAux; bP = true; bV = true; }
 protected:
 	int _num_RB = 1;
 	double _generation_probability = 1;
 	RigidBody* _model = nullptr;
-	Vector3 _mean_pos, _mean_vel;
+	Vector3 _mean_pos, _mean_vel, posL, velL;
 	std::mt19937 _mt;
 	std::uniform_real_distribution<double> _u{ 0,1 };
 	std::string _name;
+
+	bool bP = false;
+	bool bV = false;
 };
 

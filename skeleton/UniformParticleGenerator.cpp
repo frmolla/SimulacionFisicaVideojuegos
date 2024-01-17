@@ -16,7 +16,7 @@ std::list<Particle*> UniformParticleGenerator::generateParticle() {
 	switch (_kind)
 	{
 	case 0:
-		p = new Particle(_model->getColor(), Vector3(_p(_mt), 20, _p(_mt)),
+		p = new Particle(_model->getColor(), Vector3(_model->getPosition().p.x + _p(_mt), 20, _model->getPosition().p.z + _p(_mt)),
 			Vector3(_model->getVelocity().x * _v(_mt), _model->getVelocity().y * _k(_mt), _model->getVelocity().z * _v(_mt)),
 			_model->getAc(), _model->getDamping(), Particle::ACTIVE, &physx::PxSphereGeometry(1.5f), _model->getInvM());
 		p->setLifeTime(_model->getLifeTime());
@@ -30,7 +30,7 @@ std::list<Particle*> UniformParticleGenerator::generateParticle() {
 		nP.push_back(p);
 		break;
 	case 2:
-		p = new Particle(_model->getColor(), Vector3(_f(_mt), 150, _f(_mt)),
+		p = new Particle(_model->getColor(), Vector3(_f(_mt), 250, _f(_mt)),
 			Vector3(_model->getVelocity().x * _v(_mt), _model->getVelocity().y, _model->getVelocity().z * _v(_mt)),
 			_model->getAc(), _model->getDamping(), Particle::ACTIVE, &physx::PxSphereGeometry(0.2f), _model->getInvM());
 		p->setLifeTime(_model->getLifeTime());

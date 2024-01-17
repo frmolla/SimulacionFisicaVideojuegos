@@ -1,0 +1,9 @@
+- Generadores de particulas (Fuente, Lluvia, Niebla y 'fuegos artificiales')
+- Particulas eliminadas según tiempo y espacio
+- Destruir elementos al salir de la escena
+- Partículas con distinta masa
+- Un sistema sólidos rígidos 
+- Sólidos rígidos con distinto tamaño, forma, masa y tensor de inercia.
+- Dos generadores de fuerzas diferentes (sin contar muelles), cada uno con su fórmula y sus restricciones de aplicación. (gravedad, viento)
+- Interacción con el usuario a través del teclado y/o ratón.
+- Un ejemplo de muelle o de flotación. (flotación a los laterales y "veleta")

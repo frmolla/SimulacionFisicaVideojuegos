@@ -15,8 +15,13 @@
 #include "ParticleSystem.h"
 #include "Scene.h"
 
-std::string display_text = "SIM_FIS";
+#include <string>
 
+int text = 0; // 0 - p1 / 1 - p2
+int win = -1; // -1 - jugando / 0 - wp1 / 1 - wp2
+std::vector<std::string> display_texts = { "PROYECTO_FINAL_GB" , "Player1:", "Player2:" };
+std::string angleV = "0";
+std::string velV = "0";
 
 using namespace physx;
 
@@ -60,6 +65,11 @@ bool fw2 = false;
 bool fw3 = false;
 bool m = false;
 
+int angleAux = 0;
+int velAux = 0;
+
+float timer = 0;
+
 void init() {
 	sM0 = new ShotManager(0);
 	sM1 = new ShotManager(1);
@@ -93,7 +103,18 @@ void free() {
 	delete(s);
 }
 
+void reset() {
+	text = 0;
+	win = -1;
+	angleV = std::to_string(0);
+	angleAux = 0;
+	velV = std::to_string(0);
+	velAux = 0;
+}
+
 void integrate(double t) {
+	if (win != -1)
+		timer += t;
 	sM0->integrate(t);
 	sM1->integrate(t);
 	sM2->integrate(t);
@@ -120,6 +141,11 @@ void integrate(double t) {
 	}
 
 	s->integrate(t);
+
+	if (timer > 10) {
+		reset();
+		timer = 0;
+	}
 }
 
 // Initialize physics engine
@@ -195,98 +221,46 @@ void keyPress(unsigned char key, const PxTransform& camera)
 
 	switch(toupper(key))
 	{
-	case '1': {
-		sM0->shot();
+	case 'R': {
+		if (!s->getColM()) {
+			angleAux += 5;
+			angleV = std::to_string(angleAux);
+		}
 		break;
-	}
-	case '2': {
-		sM1->shot();
-		break;
-	}
-	case '3': {
-		sM2->shot(); 
-		break;
-	}
-	case 'Z': {
-		f = !f;
-		break;
-	}
-	case 'X': {
-		fO = !fO;
-		break;
-	}
-	case 'C': {
-		r = !r;
-		break;
-	}
-	case 'V': {
-		fw1 = !fw1;
-		break;
-	}
-	case 'B': {
-		fw2 = !fw2;
-		break;
-	}
-	case 'N': {
-		fw3 = !fw3;
-		break;
-	}
-	case 'M': {
-		m = !m;
-		break;
-	}
-	case 'H': {
-		m1->setE1();
-		break;
-	}
-	case 'J': {
-		m1->setE2();
-		break;
-	}
-	case 'K': {
-		m1->setE3();
-		break;
-	}
-	case 'L': {
-		m1->setE4();
-		break;
-	}
-	case 'P': {
-		m1->setE5();
-		break;
-	}
-	case '+': {
-		m1->aumK();
-		break;
-	}
-	case 'I': {
-		m1->aumM();
-		break;
-	}
-	case 'O': {
-		m1->disM();
+	}	
+	case 'F': {
+		if (!s->getColM()) {
+			angleAux -= 5;
+			angleV = std::to_string(angleAux);
+		}		
 		break;
 	}
 	case 'Y': {
-		m1->aumV();
+		if (!s->getColM()) {
+			velAux += 5;
+			velV = std::to_string(velAux);
+		}	
 		break;
 	}
-	case 'U': {
-		m1->disV();
+	case 'H': {
+		if (!s->getColM()) {
+			velAux -= 5;
+			velV = std::to_string(velAux);
+		}	
 		break;
 	}
-	case '-': {
-		m1->disK();
+	case 'C': {
+		// Confirmar
+		if (!s->getColM()) {
+			s->actionP(angleAux, velAux, text);
+			angleAux = 0;
+			velAux = 0;
+			angleV = std::to_string(angleAux);
+			velV = std::to_string(velAux);
+			text = (text + 1) % 2;
+		}	
 		break;
 	}
-	case '8': {
-		m1->setW();
-		break;
-	}
-	case '9': {
-		m1->setG();
-		break;
-	}	
 	case ' ':
 	{
 		break;
@@ -300,6 +274,8 @@ void onCollision(physx::PxActor* actor1, physx::PxActor* actor2)
 {
 	PX_UNUSED(actor1);
 	PX_UNUSED(actor2);
+
+	s->collisionS(actor1, actor2, win);
 }
 
 

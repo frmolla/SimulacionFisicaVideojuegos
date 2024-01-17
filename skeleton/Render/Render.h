@@ -33,6 +33,7 @@
 
 #include "PxPhysicsAPI.h"
 #include "foundation/PxPreprocessor.h"
+#include <vector>
 
 #if PX_WINDOWS
 #include <windows.h>
@@ -47,7 +48,12 @@
 #endif
 #include <string>
 
-extern std::string display_text;
+// texto exterior
+extern int text; // 0 - p1 / 1 - p2
+extern int win; // -1 - jugando / 0 - wp1 / 1 - wp2
+extern std::vector<std::string> display_texts;
+extern std::string angleV;
+extern std::string velV;
 
 namespace Snippets
 {

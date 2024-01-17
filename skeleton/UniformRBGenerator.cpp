@@ -20,8 +20,10 @@ std::list<RigidBody*> UniformRBGenerator::generateRB() {
 	case 0:
 		//g = new physx::PxBoxGeometry(2 + (rand() % 2), 2 + (rand() % 2), 2 + (rand() % 2));
 		g = new physx::PxBoxGeometry(3, 3, 3);
-		p = new RigidBody(true, g, _gPhysics, _gScene,Vector3(40 * _v(_mt), _r(_mt), 40 * _v(_mt)),
+		if (!bP) posL = Vector3(40 * _v(_mt), _r(_mt), 40 * _v(_mt));
+		p = new RigidBody(true, g, _gPhysics, _gScene, posL,
 			_model->getColor(), _model->getLifeTime(), mI);
+		if (bV) { p->setV(velL); p->getRB()->setName("plat"); }
 		p->setLifeTime(_model->getLifeTime());
 		nP.push_back(p);
 		break;

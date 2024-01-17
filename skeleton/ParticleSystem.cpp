@@ -76,14 +76,15 @@ void ParticleSystem::setGenerator(int currentGenerator) {
 	Firework* fP;
 	case FOUNTAIN:
 		invM = 1/2.0f;
-		vel = Vector3(30, 400, 30);
+		vel = Vector3(25, 475, 25);
 		color = Vector4(0, 0, 1, 1);
-		p = new Particle(color, Vector3(0, 0, 0),
-			Vector3(dir * vel.x * (rand() % 2), vel.y, dir * vel.z * (rand() % 2)),
+		p = new Particle(color, Vector3(0, 0, -150),
+			Vector3(vel.x, vel.y, vel.z),
 			Vector3(0,0,0), damping, Particle::ACTIVE, &physx::PxSphereGeometry(1.5f), invM);
 		p->setLifeTime(10);
 		generateSystem(p, currentGenerator, "f", 2500);
 		nGravity = Vector3(0, -10, 0);
+		gravedad = true;
 		break;
 	case FOG:
 		invM = 1/2.0f;
@@ -100,17 +101,18 @@ void ParticleSystem::setGenerator(int currentGenerator) {
 	case RAIN:
 		invM = 1/2.0f;
 		vel = Vector3(0, 0, 0);
-		color = Vector4(0, 0, 1, 1);
+		color = Vector4(0.3f, 0.78f, 0.92f, 1);
 		p = new Particle(color, Vector3(0, 0, 0),
 			Vector3(dir * vel.x * (rand() % 2), vel.y, dir * vel.z * (rand() % 2)),
 			_gravity, damping, Particle::ACTIVE, &physx::PxSphereGeometry(1.5f), invM);
 		p->setLifeTime(3);
 		generateSystem(p, currentGenerator, "r", 5000);
 		nGravity = Vector3(0, -5, 0);
+		gravedad = true;
 		break;
 	case FIREWORK1:
 		invM = 1/2.0f;
-		vel = Vector3(20, 400, 20);
+		vel = Vector3(20, 1, 20);
 		color = Vector4(1, 1, 1, 1);
 		fP = new Firework(color, Vector3(0, 0, 0),
 			vel, _gravity, damping, Particle::ACTIVE, &physx::PxSphereGeometry(1.5f), 2, invM);
@@ -209,6 +211,7 @@ void ParticleSystem::iParticles(double t) {
 		if (elastica5) {
 			muelles5();
 			elastica5 = false;
+			elastica5aux = true;
 		}
 
 		for (auto shot = particles.begin(); shot != particles.end(); ++shot)
@@ -257,20 +260,25 @@ void ParticleSystem::iParticles(double t) {
 void ParticleSystem::iFireworks(double t) {
 	for (auto g = _fireworks_generators.begin(); g != _fireworks_generators.end(); ++g) {
 		if (count < (*g)->getNumParticles()) {
-			std::list<Particle*> aux;
-			auto normal = static_cast<GaussianParticleGenerator*> (*g);
-			normal->newGen(normal->getTGen());
-			normal->newPos(0,0,0);
-			aux = (*g)->generateParticle();
-			for (auto gp = aux.begin(); gp != aux.end(); ++gp) {
-				fireworks.push_back(*gp);
-				if (gravedad)
-					_pfr.addRegistry(gr, *gp);
-				if (torbellino)
-					_pfr.addRegistry(wV, *gp);
-				count++;
+			if (fin) {
+				std::list<Particle*> aux;
+				auto normal = static_cast<GaussianParticleGenerator*> (*g);
+				normal->newGen(normal->getTGen());
+				if (fin)
+					normal->newPos(posVictoria.x, posVictoria.y, posVictoria.z);
+				else
+					normal->newPos(0, 0, 0);
+				aux = (*g)->generateParticle();
+				for (auto gp = aux.begin(); gp != aux.end(); ++gp) {
+					fireworks.push_back(*gp);
+					if (gravedad)
+						_pfr.addRegistry(gr, *gp);
+					if (torbellino)
+						_pfr.addRegistry(wV, *gp);
+					count++;
+				}
+				fin = false;
 			}
-
 		}
 
 		for (auto shot = fireworks.begin(); shot != fireworks.end(); ++shot)
@@ -317,13 +325,18 @@ void ParticleSystem::iFireworks(double t) {
 
 void ParticleSystem::air(Particle* p) {
 	if (viento) {
-		if (p->getPosition().p.x < 80 && p->getPosition().p.x > -80
-			&& p->getPosition().p.z < 80 && p->getPosition().p.z > -80) {
-			_pfr.addRegistry(aV, p);
+		if (elastica5aux) {
+			if (p->getPosition().p.x < 80 && p->getPosition().p.x > -80
+				&& p->getPosition().p.z < 80 && p->getPosition().p.z > -80) {
+				_pfr.addRegistry(aV, p);
+			}
+			else {
+				_pfr.deleteParticleForceRegistry(aV, p);
+			}
 		}
 		else {
-			_pfr.deleteParticleForceRegistry(aV, p);
-		}
+			_pfr.addRegistry(aV, p);
+		}		
 	}	
 	else 
 		_pfr.deleteParticleForceRegistry(aV, p);
@@ -332,13 +345,13 @@ void ParticleSystem::air(Particle* p) {
 void ParticleSystem::muelles1() {
 
 	// Muelle fijo
-	Particle* p3 = new Particle(Vector4(1, 1, 1, 1), Vector3(-50, 100, 0),
+	Particle* p3 = new Particle(Vector4(1, 1, 1, 1), Vector3(0, 130, 0),
 		Vector3(0, 0, 0), Vector3(0, 0, 0), 0.85,
 		Particle::ACTIVE, &physx::PxSphereGeometry(5.0f), 1 / 2.0f);
 	p3->setLifeTime(60);
 	particles.push_back(p3);
 
-	aSF = new AnchoredSpringForceGenerator(5, 10, Vector3(-30, 100, 0));
+	aSF = new AnchoredSpringForceGenerator(5, 10, Vector3(0, 150, 0));
 	_pfr.addRegistry(aSF, p3);
 	_fg.push_back(aSF);
 
@@ -505,8 +518,18 @@ void ParticleSystem::muelles5() {
 	float v = h*h*h/1000;
 	float d = m / v;
 
-	// Goma elástica
-	bP = new Particle(Vector4(1, 1, 1, 1), Vector3(0, 50, 0),
+	// Flotación
+	bP = new Particle(Vector4(0.5f, 0.08f, 0.08f, 1.0f), Vector3(-125, 30, 75),
+		Vector3(0, 0, 0), Vector3(0, 0, 0), 0.85,
+		Particle::ACTIVE, &physx::PxBoxGeometry(h, h, h), 1 / m);
+	bP->setLifeTime(60);
+	particles.push_back(bP);
+
+	bSF = new BuoyancyForceGenerator(h, v, d);
+	_pfr.addRegistry(bSF, bP);
+	_fg.push_back(rSF);
+
+	bP = new Particle(Vector4(0.5f, 0.08f, 0.08f, 1.0f), Vector3(125, 30, 75),
 		Vector3(0, 0, 0), Vector3(0, 0, 0), 0.85,
 		Particle::ACTIVE, &physx::PxBoxGeometry(h, h, h), 1 / m);
 	bP->setLifeTime(60);
@@ -536,6 +559,11 @@ void ParticleSystem::setW() {
 	viento = !viento;
 	std::cout << viento << std::endl;
 	
+}
+
+void ParticleSystem::setWF(int fuerzaV) {
+	viento = true;
+	aV->setVel(Vector3(fuerzaV,0,0));
 }
 
 void ParticleSystem::aumM() {

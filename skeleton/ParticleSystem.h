@@ -45,16 +45,21 @@ public:
 	void disV();
 	void setG();
 	void setW();
+	void setWF(int fuerzaV);
 	inline void setE1() { elastica1 = true; }
 	inline void setE2() { elastica2 = true; }
 	inline void setE3() { elastica3 = true; }
 	inline void setE4() { elastica4 = true; }
 	inline void setE5() { elastica5 = true; }
 
+	inline void setPV(Vector3 pos) { posVictoria = pos; fin = true; }
+
 private:
 	int currentShotType;
 
 	float timer = 0;
+
+	Vector3 posVictoria = Vector3(0,0,0);
 
 	int typeF = 0;
 	int dir = -1;
@@ -111,5 +116,8 @@ private:
 	bool elastica3 = false;
 	bool elastica4 = false;
 	bool elastica5 = false;
+	bool elastica5aux = false;
+
+	bool fin = false;
 };
 

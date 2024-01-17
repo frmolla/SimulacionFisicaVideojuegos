@@ -10,6 +10,7 @@ RigidBody::RigidBody(bool dyn, physx::PxGeometry* nGeo, physx::PxPhysics* gPhysi
 		// rb	
 		rb = gPhysics->createRigidDynamic(physx::PxTransform({_pos.x, _pos.y, _pos.z}));
 		rb->setLinearVelocity({0,5,0});
+		_vel = Vector3(0,0,0);
 		rb->setAngularVelocity({0,0,0});
 		physx::PxShape* shape_ad = CreateShape(*_geo);
 		rb->attachShape(*shape_ad);

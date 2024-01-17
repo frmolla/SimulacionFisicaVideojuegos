@@ -33,3 +33,9 @@ std::list<Particle*> CircleParticleGenerator::generateParticle() {
     return nP;
 };
 
+void CircleParticleGenerator::newPos(int nX, int nY, int nZ) {
+    nPos.x = nX;
+    nPos.y = nY;
+    nPos.z = nZ;
+}
+
